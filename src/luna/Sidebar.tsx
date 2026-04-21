@@ -36,7 +36,7 @@ export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
           className="overflow-hidden whitespace-nowrap"
           style={{ opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}
         >
-          <div className="text-white text-[13px] font-semibold leading-tight">Luna LifeOS</div>
+           <div className="text-white text-[13px] font-semibold leading-tight">Luna x Motherhood</div>
           <div className="eyebrow text-slate-500 leading-tight">Clinical</div>
         </div>
       </div>
