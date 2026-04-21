@@ -1,35 +1,12 @@
 import React from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { toast } from 'sonner';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
-import { C, BLOOD } from '../data';
+import { C, type TrendMetric } from '../data';
+import type { LunaCtx } from '../Layout';
 import { Eyebrow, StatusPill } from '../atoms';
 
-type Metric = {
-  label: string; current: string; badge: string; badgeColor: { bg: string; fg: string };
-  cols: Array<{ p: string; v: string }>; line: number[]; stroke: string;
-};
-
-const METRICS: Metric[] = [
-  {
-    label: 'HRV', current: '48 ms',
-    badge: '+26% improvement', badgeColor: { bg: '#ECFDF5', fg: '#065F46' },
-    cols: [{ p: '90d', v: '40' }, { p: '60d', v: '44' }, { p: '30d', v: '48' }],
-    line: [40, 41, 42, 43, 44, 45, 46, 47, 48], stroke: C.ok,
-  },
-  {
-    label: 'Resting HR', current: '62 bpm',
-    badge: 'Stable, healthy', badgeColor: { bg: '#EEF2FF', fg: '#3730A3' },
-    cols: [{ p: '90d', v: '64' }, { p: '60d', v: '63' }, { p: '30d', v: '62' }],
-    line: [64, 64, 63, 63, 62, 63, 62, 62, 62], stroke: C.indigo,
-  },
-  {
-    label: 'Stress Score', current: '41',
-    badge: '−21% over 90d', badgeColor: { bg: '#FFFBEB', fg: '#92400E' },
-    cols: [{ p: '90d', v: '52' }, { p: '60d', v: '46' }, { p: '30d', v: '41' }],
-    line: [52, 50, 48, 47, 46, 44, 43, 42, 41], stroke: C.low,
-  },
-];
-
-const MetricCard: React.FC<{ m: Metric }> = ({ m }) => {
+const MetricCard: React.FC<{ m: TrendMetric }> = ({ m }) => {
   const data = m.line.map((v, i) => ({ i, v }));
   return (
     <div className="luna-card p-5">
@@ -63,19 +40,24 @@ const MetricCard: React.FC<{ m: Metric }> = ({ m }) => {
 };
 
 export default function Biomarkers() {
+  const ctx = useOutletContext<LunaCtx>();
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {METRICS.map((m) => <MetricCard key={m.label} m={m} />)}
+        {ctx.data.trends.map((m) => <MetricCard key={m.label} m={m} />)}
       </div>
 
       <div className="luna-card p-5">
         <div className="flex items-center justify-between mb-3">
           <div>
             <Eyebrow>Blood panel</Eyebrow>
-            <div className="text-[15px] font-semibold text-slate-800 mt-1">Jan 12, 2026</div>
+            <div className="text-[15px] font-semibold text-slate-800 mt-1">{ctx.data.bloodDate}</div>
           </div>
-          <button className="text-[12.5px] font-medium hover:underline" style={{ color: C.indigo }}>
+          <button
+            onClick={() => toast('Upload coming soon', { description: 'New panel uploads will be enabled in the next release.' })}
+            className="text-[12.5px] font-medium hover:underline"
+            style={{ color: C.indigo }}
+          >
             + Upload new panel
           </button>
         </div>
@@ -90,7 +72,7 @@ export default function Biomarkers() {
               </tr>
             </thead>
             <tbody>
-              {BLOOD.map((b) => (
+              {ctx.data.blood.map((b) => (
                 <tr key={b.k} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                   <td className="py-2.5 pr-4 text-slate-700">{b.k}</td>
                   <td className="py-2.5 pr-4 mono font-semibold text-slate-800">{b.v}</td>
@@ -101,12 +83,14 @@ export default function Biomarkers() {
             </tbody>
           </table>
         </div>
-        <div
-          className="mt-4 p-3 rounded-lg text-[12.5px]"
-          style={{ background: '#FFFBEB', borderLeft: `3px solid ${C.low}`, color: '#92400E' }}
-        >
-          ⚠ Omega-3 Index 6.8% is below 8% optimal. Consider increasing EPA/DHA intake; retest in 6 months.
-        </div>
+        {ctx.data.bloodWarning && (
+          <div
+            className="mt-4 p-3 rounded-lg text-[12.5px]"
+            style={{ background: '#FFFBEB', borderLeft: `3px solid ${C.low}`, color: '#92400E' }}
+          >
+            {ctx.data.bloodWarning}
+          </div>
+        )}
       </div>
     </div>
   );

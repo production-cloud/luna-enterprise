@@ -1,48 +1,60 @@
 import React, { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer,
 } from 'recharts';
-import { C, SLEEP_14 } from '../data';
+import { C, getPatientData, type Patient } from '../data';
+import type { LunaCtx } from '../Layout';
 import { Eyebrow } from '../atoms';
+import { downloadPatientSummary } from '../pdf';
 
-const AlertStrip = () => (
-  <div className="luna-card p-4">
-    <div className="flex items-center gap-3 mb-3">
-      <Eyebrow>Active Alerts</Eyebrow>
-      <span className="text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full" style={{ background: C.flag }}>3</span>
+const AlertStrip: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
+  const sevColor = (s: string) =>
+    s === 'HIGH' ? { color: C.flag, bg: '#FEF2F2' } :
+    s === 'MED'  ? { color: C.low,  bg: '#FFFBEB' } :
+                   { color: C.normal, bg: '#F1F5F9' };
+  return (
+    <div className="luna-card p-4">
+      <div className="flex items-center gap-3 mb-3">
+        <Eyebrow>Active Alerts</Eyebrow>
+        <span className="text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full" style={{ background: C.flag }}>
+          {ctx.data.alerts.length}
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        {ctx.data.alerts.map((a, i) => {
+          const s = sevColor(a.sev);
+          return (
+            <div
+              key={i}
+              className="flex-1 min-w-[260px] flex items-start gap-3 p-3 rounded-lg"
+              style={{ background: s.bg, borderLeft: `2px solid ${s.color}` }}
+            >
+              <span className="text-[10px] font-bold tracking-wide" style={{ color: s.color }}>{a.sev}</span>
+              <span className="text-[12.5px] text-slate-700 leading-snug">{a.t}</span>
+            </div>
+          );
+        })}
+      </div>
     </div>
-    <div className="flex flex-wrap gap-3">
-      {[
-        { sev: 'HIGH', color: C.flag, bg: '#FEF2F2', t: 'Sleep debt 3.2h — may impact reproductive hormone regulation' },
-        { sev: 'MED',  color: C.low,  bg: '#FFFBEB', t: 'Omega-3 index 6.8% — below 8% optimal. Retest in 6 months' },
-        { sev: 'MED',  color: C.low,  bg: '#FFFBEB', t: 'Caffeine after 3pm linked to reduced deep sleep' },
-      ].map((a, i) => (
-        <div
-          key={i}
-          className="flex-1 min-w-[260px] flex items-start gap-3 p-3 rounded-lg"
-          style={{ background: a.bg, borderLeft: `2px solid ${a.color}` }}
-        >
-          <span className="text-[10px] font-bold tracking-wide" style={{ color: a.color }}>{a.sev}</span>
-          <span className="text-[12.5px] text-slate-700 leading-snug">{a.t}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
+  );
+};
 
-const PhaseRing = () => {
+const PhaseRing: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
+  const { phase } = ctx.data;
   const phases = [
-    { name: 'Menstrual',  color: C.menstrual,  days: 5 },
-    { name: 'Follicular', color: C.follicular, days: 9 },
-    { name: 'Ovulation',  color: C.ovulation,  days: 1 },
-    { name: 'Luteal',     color: C.luteal,     days: 15 },
+    { name: 'Menstrual',  color: C.menstrual,  days: 5,  active: 0 },
+    { name: 'Follicular', color: C.follicular, days: Math.max(1, phase.ovDay - 6), active: 1 },
+    { name: 'Ovulation',  color: C.ovulation,  days: 1,  active: 2 },
+    { name: 'Luteal',     color: C.luteal,     days: phase.len - 5 - Math.max(1, phase.ovDay - 6) - 1, active: 3 },
   ];
-  const total = 30;
+  const total = phase.len;
   const r = 72;
   const circ = 2 * Math.PI * r;
   const gap = 3;
   let offset = 0;
-  const activeIdx = 3;
+  const activeIdx = phases.findIndex(p => p.name === phase.name);
 
   return (
     <div className="luna-card p-5">
@@ -71,8 +83,8 @@ const PhaseRing = () => {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="eyebrow text-slate-400">Current phase</div>
-          <div className="text-[22px] font-bold text-slate-800 leading-none mt-1">Luteal</div>
-          <div className="text-[12px] mono mt-1" style={{ color: C.indigo }}>Day 12</div>
+          <div className="text-[22px] font-bold text-slate-800 leading-none mt-1">{phase.name}</div>
+          <div className="text-[12px] mono mt-1" style={{ color: C.indigo }}>Day {phase.day}</div>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 mt-4">
@@ -84,22 +96,17 @@ const PhaseRing = () => {
         ))}
       </div>
       <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500">
-        Cycle 4 · 30 days · OV Day 15
+        Cycle {phase.cycleNo} · {phase.len} days · OV Day {phase.ovDay}
         <div className="mt-0.5">Based on skin temp + Luna sync</div>
       </div>
     </div>
   );
 };
 
-const BiomarkerSnapshot = () => {
+const BiomarkerSnapshot: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
   const [range, setRange] = useState<'30d' | '60d' | '90d'>('30d');
-  const rows = [
-    { k: 'Resting HR',    v: '62 bpm',   d: 'stable',       g: false },
-    { k: 'HRV',           v: '48 ms',    d: '↑ +26% 90d',  g: true  },
-    { k: 'Sleep Quality', v: '74%',      d: '↑ +4%',        g: true  },
-    { k: 'Stress Score',  v: '41',       d: '↓ −21%',       g: true  },
-    { k: 'SpO₂',          v: '96.4%',    d: 'stable',       g: false },
-  ];
+  // Range modulates a small note; values stay current
+  const rangeNote = range === '30d' ? '30-day window' : range === '60d' ? '60-day window' : '90-day window';
   return (
     <div className="luna-card p-5">
       <div className="flex items-center justify-between mb-3">
@@ -122,7 +129,7 @@ const BiomarkerSnapshot = () => {
         </div>
       </div>
       <div className="space-y-2.5">
-        {rows.map((r) => (
+        {ctx.data.snapshot.map((r) => (
           <div key={r.k} className="flex items-center justify-between py-1">
             <span className="text-[12.5px] text-slate-600 w-24">{r.k}</span>
             <span className="mono text-[15px] font-semibold text-slate-800 flex-1">{r.v}</span>
@@ -134,14 +141,16 @@ const BiomarkerSnapshot = () => {
         className="mt-4 px-3 py-2 rounded-lg text-[12px] font-medium"
         style={{ background: '#ECFDF5', color: '#065F46' }}
       >
-        🏆 HRV up 26% over 90 days
+        {ctx.data.snapshotCallout}
       </div>
+      <div className="text-[10px] text-slate-400 mt-1.5">{rangeNote}</div>
     </div>
   );
 };
 
-const SleepSummary = () => {
-  const data = SLEEP_14.map((v, i) => ({ d: `D${i + 1}`, h: v }));
+const SleepSummary: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
+  const data = ctx.data.sleep14.map((v, i) => ({ d: `D${i + 1}`, h: v }));
+  const ss = ctx.data.sleepStats;
   return (
     <div className="luna-card p-5">
       <Eyebrow className="mb-3">Sleep · last 14 nights</Eyebrow>
@@ -159,9 +168,9 @@ const SleepSummary = () => {
       </div>
       <div className="grid grid-cols-3 gap-2 mt-3">
         {[
-          { l: 'Deep sleep', v: '68 min', c: C.low },
-          { l: 'Sleep debt', v: '3.2h',   c: C.low },
-          { l: 'Avg quality', v: '73%',   c: C.normal },
+          { l: 'Deep sleep', v: ss.deep, c: ss.deepFlag ? C.low : C.ok },
+          { l: 'Sleep debt', v: ss.debt, c: ss.debtFlag ? C.low : C.ok },
+          { l: 'Avg quality', v: ss.quality, c: C.normal },
         ].map((s) => (
           <div key={s.l}>
             <div className="text-[10.5px] text-slate-500">{s.l}</div>
@@ -173,34 +182,45 @@ const SleepSummary = () => {
         className="mt-3 px-3 py-2 rounded-lg text-[12px]"
         style={{ background: '#FFFBEB', color: '#92400E' }}
       >
-        ☕ Caffeine after 3pm costs 41 min deep sleep
+        {ctx.data.sleepCallout}
       </div>
     </div>
   );
 };
 
-const FooterStrip = () => (
-  <div className="luna-card px-4 py-3 flex items-center justify-between">
-    <div className="flex items-center gap-2.5 text-[12px] text-slate-600">
-      <span className="luna-pulse inline-block w-2 h-2 rounded-full" style={{ background: C.ok }} />
-      <span><span className="mono">127 days</span> continuous monitoring · Last synced <span className="mono">Apr 20, 2026</span></span>
+const FooterStrip: React.FC<{ patient: Patient }> = ({ patient }) => {
+  const data = getPatientData(patient.id);
+  return (
+    <div className="luna-card px-4 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-2.5 text-[12px] text-slate-600">
+        <span className="luna-pulse inline-block w-2 h-2 rounded-full" style={{ background: C.ok }} />
+        <span><span className="mono">{data.monitoring.days} days</span> continuous monitoring · Last synced <span className="mono">{data.monitoring.lastSync}</span></span>
+      </div>
+      <button
+        onClick={() => {
+          try { downloadPatientSummary(patient, data); toast.success(`Downloading ${patient.name.split(' ')[0]}'s summary`); }
+          catch { toast.error('Failed to generate PDF'); }
+        }}
+        className="text-[12.5px] font-medium hover:underline"
+        style={{ color: C.indigo }}
+      >
+        Download PDF Report →
+      </button>
     </div>
-    <button className="text-[12.5px] font-medium hover:underline" style={{ color: C.indigo }}>
-      Download PDF Report →
-    </button>
-  </div>
-);
+  );
+};
 
 export default function Overview() {
+  const ctx = useOutletContext<LunaCtx>();
   return (
     <div className="space-y-4">
-      <AlertStrip />
+      <AlertStrip ctx={ctx} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <PhaseRing />
-        <BiomarkerSnapshot />
-        <SleepSummary />
+        <PhaseRing ctx={ctx} />
+        <BiomarkerSnapshot ctx={ctx} />
+        <SleepSummary ctx={ctx} />
       </div>
-      <FooterStrip />
+      <FooterStrip patient={ctx.patient} />
     </div>
   );
 }
