@@ -3,8 +3,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { LunaLayout } from "./luna/Layout";
+import Overview from "./luna/pages/Overview";
+import Cycle from "./luna/pages/Cycle";
+import Biomarkers from "./luna/pages/Biomarkers";
+import Lifestyle from "./luna/pages/Lifestyle";
+import Insights from "./luna/pages/Insights";
+import Partner from "./luna/pages/Partner";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +21,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route element={<LunaLayout />}>
+            <Route path="/" element={<Overview />} />
+            <Route path="/cycle" element={<Cycle />} />
+            <Route path="/biomarkers" element={<Biomarkers />} />
+            <Route path="/lifestyle" element={<Lifestyle />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/partner" element={<Partner />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
