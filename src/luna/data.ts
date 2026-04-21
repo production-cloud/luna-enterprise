@@ -34,7 +34,12 @@ export type Cycle = {
 export type Alert = { sev: 'HIGH' | 'MED' | 'LOW'; t: string };
 
 export type Snapshot = {
-  k: string; v: string; d: string; g: boolean;
+  k: string;
+  vals: {
+    '30d': { v: string; d: string; g: boolean };
+    '60d': { v: string; d: string; g: boolean };
+    '90d': { v: string; d: string; g: boolean };
+  };
 };
 
 export type TrendMetric = {
@@ -111,11 +116,11 @@ const PRIYA: PatientData = {
   ],
   phase: { name: 'Luteal', day: 12, cycleNo: 4, len: 30, ovDay: 15 },
   snapshot: [
-    { k: 'Resting HR',    v: '62 bpm',   d: 'stable',      g: false },
-    { k: 'HRV',           v: '48 ms',    d: '↑ +26% 90d', g: true  },
-    { k: 'Sleep Quality', v: '74%',      d: '↑ +4%',       g: true  },
-    { k: 'Stress Score',  v: '41',       d: '↓ −21%',      g: true  },
-    { k: 'SpO₂',          v: '96.4%',    d: 'stable',      g: false },
+    { k:'Resting HR',    vals:{ '30d':{v:'62 bpm',d:'stable',g:false}, '60d':{v:'63 bpm',d:'↓ −1 bpm',g:true},  '90d':{v:'64 bpm',d:'↓ −2 bpm',g:true}  } },
+    { k:'HRV',           vals:{ '30d':{v:'48 ms', d:'↑ +9%',  g:true},  '60d':{v:'45 ms', d:'↑ +18%', g:true},  '90d':{v:'40 ms', d:'↑ +26%', g:true}  } },
+    { k:'Sleep Quality', vals:{ '30d':{v:'74%',   d:'↑ +4%',  g:true},  '60d':{v:'72%',   d:'↑ +2%',  g:true},  '90d':{v:'70%',   d:'baseline',g:false} } },
+    { k:'Stress Score',  vals:{ '30d':{v:'41',    d:'↓ −8%',  g:true},  '60d':{v:'46',    d:'↓ −14%', g:true},  '90d':{v:'52',    d:'↓ −21%', g:true}  } },
+    { k:'SpO₂',          vals:{ '30d':{v:'96.4%', d:'stable', g:false}, '60d':{v:'96.3%', d:'stable', g:false}, '90d':{v:'96.5%', d:'stable', g:false} } },
   ],
   snapshotCallout: '🏆 HRV up 26% over 90 days',
   sleep14: [7.2, 6.5, 6.8, 5.9, 7.1, 6.3, 7.4, 6.1, 6.9, 7.0, 6.2, 7.3, 6.7, 6.5],
@@ -232,11 +237,11 @@ const ANANYA: PatientData = {
   ],
   phase: { name: 'Follicular', day: 9, cycleNo: 4, len: 36, ovDay: 21 },
   snapshot: [
-    { k:'Resting HR',    v:'71 bpm',  d:'↑ +4 bpm 90d', g:false },
-    { k:'HRV',           v:'32 ms',   d:'↓ −12% 90d',   g:false },
-    { k:'Sleep Quality', v:'62%',     d:'↓ −6%',         g:false },
-    { k:'Stress Score',  v:'68',      d:'↑ +18%',        g:false },
-    { k:'SpO₂',          v:'97.1%',   d:'stable',        g:false },
+    { k:'Resting HR',    vals:{ '30d':{v:'71 bpm',d:'↑ +2 bpm',g:false}, '60d':{v:'69 bpm',d:'↑ +3 bpm',g:false}, '90d':{v:'67 bpm',d:'↑ +4 bpm',g:false} } },
+    { k:'HRV',           vals:{ '30d':{v:'32 ms', d:'↓ −6%',  g:false}, '60d':{v:'34 ms', d:'↓ −9%',  g:false}, '90d':{v:'36 ms', d:'↓ −12%', g:false} } },
+    { k:'Sleep Quality', vals:{ '30d':{v:'62%',   d:'↓ −2%',  g:false}, '60d':{v:'64%',   d:'↓ −4%',  g:false}, '90d':{v:'66%',   d:'↓ −6%',  g:false} } },
+    { k:'Stress Score',  vals:{ '30d':{v:'68',    d:'↑ +6%',  g:false}, '60d':{v:'63',    d:'↑ +12%', g:false}, '90d':{v:'58',    d:'↑ +18%', g:false} } },
+    { k:'SpO₂',          vals:{ '30d':{v:'97.1%', d:'stable', g:false}, '60d':{v:'97.0%', d:'stable', g:false}, '90d':{v:'97.2%', d:'stable', g:false} } },
   ],
   snapshotCallout: '⚠ HRV trending down — review stress + sleep',
   sleep14: [5.8, 6.1, 5.5, 6.4, 5.9, 5.2, 6.0, 5.8, 6.2, 5.4, 5.9, 6.1, 5.7, 6.0],
@@ -353,11 +358,11 @@ const DEEPA: PatientData = {
   ],
   phase: { name: 'Follicular', day: 8, cycleNo: 4, len: 28, ovDay: 14 },
   snapshot: [
-    { k:'Resting HR',    v:'56 bpm',  d:'↓ −2 bpm 90d',  g:true },
-    { k:'HRV',           v:'68 ms',   d:'↑ +8% 90d',     g:true },
-    { k:'Sleep Quality', v:'88%',     d:'↑ +3%',          g:true },
-    { k:'Stress Score',  v:'28',      d:'↓ −9%',          g:true },
-    { k:'SpO₂',          v:'97.8%',   d:'stable',         g:false },
+    { k:'Resting HR',    vals:{ '30d':{v:'56 bpm',d:'↓ −1 bpm',g:true},  '60d':{v:'57 bpm',d:'↓ −1 bpm',g:true},  '90d':{v:'58 bpm',d:'↓ −2 bpm',g:true}  } },
+    { k:'HRV',           vals:{ '30d':{v:'68 ms', d:'↑ +3%',  g:true},   '60d':{v:'66 ms', d:'↑ +5%',  g:true},   '90d':{v:'63 ms', d:'↑ +8%',  g:true}  } },
+    { k:'Sleep Quality', vals:{ '30d':{v:'88%',   d:'↑ +1%',  g:true},   '60d':{v:'87%',   d:'↑ +2%',  g:true},   '90d':{v:'85%',   d:'↑ +3%',  g:true}  } },
+    { k:'Stress Score',  vals:{ '30d':{v:'28',    d:'↓ −3%',  g:true},   '60d':{v:'30',    d:'↓ −6%',  g:true},   '90d':{v:'31',    d:'↓ −9%',  g:true}  } },
+    { k:'SpO₂',          vals:{ '30d':{v:'97.8%', d:'stable', g:false},  '60d':{v:'97.7%', d:'stable', g:false},  '90d':{v:'97.8%', d:'stable', g:false} } },
   ],
   snapshotCallout: '🏆 All biomarkers in optimal zone',
   sleep14: [7.8, 8.1, 7.9, 8.2, 7.7, 8.0, 7.9, 8.3, 7.8, 8.0, 8.1, 7.9, 8.2, 7.8],
@@ -473,11 +478,11 @@ const RIYA: PatientData = {
   ],
   phase: { name: 'Luteal', day: 8, cycleNo: 4, len: 30, ovDay: 13 },
   snapshot: [
-    { k:'Resting HR',    v:'59 bpm',  d:'stable',        g:false },
-    { k:'HRV',           v:'58 ms',   d:'↑ +14% 90d',   g:true },
-    { k:'Sleep Quality', v:'82%',     d:'↑ +6%',         g:true },
-    { k:'Stress Score',  v:'34',      d:'↓ −15%',        g:true },
-    { k:'SpO₂',          v:'97.4%',   d:'stable',        g:false },
+    { k:'Resting HR',    vals:{ '30d':{v:'59 bpm',d:'stable', g:false}, '60d':{v:'59 bpm',d:'↓ −1 bpm',g:true},  '90d':{v:'60 bpm',d:'↓ −1 bpm',g:true}  } },
+    { k:'HRV',           vals:{ '30d':{v:'58 ms', d:'↑ +5%',  g:true},  '60d':{v:'55 ms', d:'↑ +8%',  g:true},   '90d':{v:'51 ms', d:'↑ +14%', g:true}  } },
+    { k:'Sleep Quality', vals:{ '30d':{v:'82%',   d:'↑ +2%',  g:true},  '60d':{v:'80%',   d:'↑ +4%',  g:true},   '90d':{v:'77%',   d:'↑ +6%',  g:true}  } },
+    { k:'Stress Score',  vals:{ '30d':{v:'34',    d:'↓ −5%',  g:true},  '60d':{v:'37',    d:'↓ −10%', g:true},   '90d':{v:'40',    d:'↓ −15%', g:true}  } },
+    { k:'SpO₂',          vals:{ '30d':{v:'97.4%', d:'stable', g:false}, '60d':{v:'97.3%', d:'stable', g:false},  '90d':{v:'97.4%', d:'stable', g:false} } },
   ],
   snapshotCallout: '✓ HRV +14%, recovery markers strong',
   sleep14: [7.6, 7.4, 7.8, 7.5, 7.7, 7.3, 7.9, 7.6, 7.5, 7.8, 7.4, 7.6, 7.7, 7.5],
