@@ -2,23 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 60 14% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 247 56% 56%;
+    --primary-foreground: 0 0% 100%;
+
+    --violet: 258 90% 66%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -34,7 +38,7 @@ All colors MUST be HSL.
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 247 56% 56%;
 
     --radius: 0.5rem;
 
@@ -101,5 +105,45 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-feature-settings: 'tnum';
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .luna-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid rgba(15,23,42,0.04);
+  }
+
+  .fade-in {
+    animation: lunaFadeIn 350ms ease both;
+  }
+
+  @keyframes lunaFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lunaPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(1.25); }
+  }
+  .luna-pulse { animation: lunaPulse 1.8s ease-in-out infinite; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 9999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
 }
