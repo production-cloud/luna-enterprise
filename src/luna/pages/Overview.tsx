@@ -43,13 +43,18 @@ const AlertStrip: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
 
 const PhaseRing: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
   const { phase } = ctx.data;
+  // derive period from current cycle data (most recent)
+  const lastCycle = ctx.data.cycles[ctx.data.cycles.length - 1];
+  const period = lastCycle?.period ?? 5;
+  const follicular = Math.max(1, phase.ovDay - period);
+  const luteal = Math.max(1, phase.len - phase.ovDay);
   const phases = [
-    { name: 'Menstrual',  color: C.menstrual,  days: 5,  active: 0 },
-    { name: 'Follicular', color: C.follicular, days: Math.max(1, phase.ovDay - 6), active: 1 },
-    { name: 'Ovulation',  color: C.ovulation,  days: 1,  active: 2 },
-    { name: 'Luteal',     color: C.luteal,     days: phase.len - 5 - Math.max(1, phase.ovDay - 6) - 1, active: 3 },
+    { name: 'Menstrual',  color: C.menstrual,  days: period },
+    { name: 'Follicular', color: C.follicular, days: follicular },
+    { name: 'Ovulation',  color: C.ovulation,  days: 1 },
+    { name: 'Luteal',     color: C.luteal,     days: luteal },
   ];
-  const total = phase.len;
+  const total = phases.reduce((s, p) => s + p.days, 0);
   const r = 72;
   const circ = 2 * Math.PI * r;
   const gap = 3;
@@ -62,10 +67,11 @@ const PhaseRing: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
       <div className="relative flex items-center justify-center" style={{ height: 200 }}>
         <svg width="200" height="200" viewBox="0 0 200 200" style={{ transform: 'rotate(-90deg)' }}>
           {phases.map((p, i) => {
-            const len = (p.days / total) * circ - gap;
-            const dash = `${Math.max(len, 1)} ${circ}`;
+            const seg = (p.days / total) * circ;
+            const len = Math.max(seg - gap, 6);
+            const dash = `${len} ${circ}`;
             const dashOffset = -offset;
-            offset += (p.days / total) * circ;
+            offset += seg;
             return (
               <circle
                 key={i}
@@ -105,8 +111,6 @@ const PhaseRing: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
 
 const BiomarkerSnapshot: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
   const [range, setRange] = useState<'30d' | '60d' | '90d'>('30d');
-  // Range modulates a small note; values stay current
-  const rangeNote = range === '30d' ? '30-day window' : range === '60d' ? '60-day window' : '90-day window';
   return (
     <div className="luna-card p-5">
       <div className="flex items-center justify-between mb-3">
@@ -132,8 +136,8 @@ const BiomarkerSnapshot: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
         {ctx.data.snapshot.map((r) => (
           <div key={r.k} className="flex items-center justify-between py-1">
             <span className="text-[12.5px] text-slate-600 w-24">{r.k}</span>
-            <span className="mono text-[15px] font-semibold text-slate-800 flex-1">{r.v}</span>
-            <span className="text-[11.5px]" style={{ color: r.g ? C.ok : C.normal }}>{r.d}</span>
+            <span className="mono text-[15px] font-semibold text-slate-800 flex-1">{r.vals[range].v}</span>
+            <span className="text-[11.5px]" style={{ color: r.vals[range].g ? C.ok : C.normal }}>{r.vals[range].d}</span>
           </div>
         ))}
       </div>
@@ -143,7 +147,6 @@ const BiomarkerSnapshot: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
       >
         {ctx.data.snapshotCallout}
       </div>
-      <div className="text-[10px] text-slate-400 mt-1.5">{rangeNote}</div>
     </div>
   );
 };
@@ -151,9 +154,13 @@ const BiomarkerSnapshot: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
 const SleepSummary: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
   const data = ctx.data.sleep14.map((v, i) => ({ d: `D${i + 1}`, h: v }));
   const ss = ctx.data.sleepStats;
+  const avg = (ctx.data.sleep14.reduce((s, v) => s + v, 0) / ctx.data.sleep14.length).toFixed(1);
   return (
     <div className="luna-card p-5">
-      <Eyebrow className="mb-3">Sleep · last 14 nights</Eyebrow>
+      <div className="flex items-center justify-between mb-3">
+        <Eyebrow>Sleep · last 14 nights</Eyebrow>
+        <span className="mono text-[11px] text-slate-400">avg {avg}h</span>
+      </div>
       <div style={{ height: 140 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
