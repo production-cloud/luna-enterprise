@@ -1,8 +1,10 @@
 import React from 'react';
-import { C, SUPPS, HABITS } from '../data';
+import { useOutletContext } from 'react-router-dom';
+import type { LunaCtx } from '../Layout';
 import { AdherenceBar, Eyebrow } from '../atoms';
 
 export default function Lifestyle() {
+  const ctx = useOutletContext<LunaCtx>();
   return (
     <div className="space-y-4">
       <div className="luna-card p-5">
@@ -12,7 +14,7 @@ export default function Lifestyle() {
             className="text-[11px] font-medium px-2 py-0.5 rounded-full"
             style={{ background: '#ECFDF5', color: '#065F46' }}
           >
-            Avg adherence 91%
+            Avg adherence {ctx.data.suppsAvg}%
           </span>
         </div>
         <table className="w-full text-[12.5px]">
@@ -24,7 +26,7 @@ export default function Lifestyle() {
             </tr>
           </thead>
           <tbody>
-            {SUPPS.map((s) => (
+            {ctx.data.supps.map((s) => (
               <tr key={s.k} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                 <td className="py-3 pr-4">
                   <div className="font-semibold text-slate-800">{s.k}</div>
@@ -56,7 +58,7 @@ export default function Lifestyle() {
             </tr>
           </thead>
           <tbody>
-            {HABITS.map((h) => (
+            {ctx.data.habits.map((h) => (
               <tr key={h.k} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                 <td className="py-2.5 pr-4 font-semibold text-slate-700">{h.k}</td>
                 <td className="py-2.5 pr-4 text-slate-500">{h.f}</td>

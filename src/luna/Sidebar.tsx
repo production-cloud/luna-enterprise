@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { C, PAGES } from './data';
 import { LunaLogo } from './atoms';
-import { IconOverview, IconCycle, IconBio, IconLifestyle, IconSparkle, IconPartner, IconSettings, IconHelp } from './icons';
+import { IconOverview, IconCycle, IconBio, IconLifestyle, IconSparkle, IconPartner } from './icons';
 
 const ICONS: Record<string, React.FC> = {
   overview: IconOverview,
@@ -29,7 +29,9 @@ export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
       }}
     >
       <div className="h-16 flex items-center px-4 gap-3 border-b border-white/5">
-        <LunaLogo size={26} />
+        <div className="shrink-0 flex items-center justify-center" style={{ width: 32 }}>
+          <LunaLogo size={28} />
+        </div>
         <div
           className="overflow-hidden whitespace-nowrap"
           style={{ opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}
@@ -78,23 +80,6 @@ export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
           );
         })}
       </nav>
-
-      <div className="py-3 px-2 space-y-1 border-t border-white/5">
-        {[{ I: IconSettings, l: 'Settings' }, { I: IconHelp, l: 'Help' }].map(({ I, l }) => (
-          <button
-            key={l}
-            className="w-full flex items-center gap-3 h-10 rounded-lg px-3 text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
-          >
-            <span className="shrink-0 flex items-center justify-center w-[18px]"><I /></span>
-            <span
-              className="text-[13px] font-medium whitespace-nowrap overflow-hidden"
-              style={{ opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}
-            >
-              {l}
-            </span>
-          </button>
-        ))}
-      </div>
     </aside>
   );
 };

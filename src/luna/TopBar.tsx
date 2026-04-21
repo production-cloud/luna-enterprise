@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { C, PAGES, PATIENTS, type Patient } from './data';
+import { toast } from 'sonner';
+import { C, PAGES, PATIENTS, getPatientData, type Patient } from './data';
 import { AlertDot, Eyebrow, GradientAvatar } from './atoms';
 import { IconChevron, IconDownload } from './icons';
+import { downloadPatientSummary } from './pdf';
 
 type Props = {
   patient: Patient;
@@ -13,6 +15,15 @@ export const TopBar: React.FC<Props> = ({ patient, onSelectPatient }) => {
   const loc = useLocation();
   const page = PAGES.find((p) => p.path === loc.pathname)?.label ?? 'Overview';
   const [open, setOpen] = useState(false);
+
+  const handleDownload = () => {
+    try {
+      downloadPatientSummary(patient, getPatientData(patient.id));
+      toast.success(`Downloading ${patient.name.split(' ')[0]}'s summary`);
+    } catch (e) {
+      toast.error('Failed to generate PDF');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6">
@@ -74,10 +85,8 @@ export const TopBar: React.FC<Props> = ({ patient, onSelectPatient }) => {
           </>
         )}
 
-        <button className="h-9 px-3 border border-slate-200 rounded-lg text-[13px] font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-          Share with patient
-        </button>
         <button
+          onClick={handleDownload}
           className="h-9 px-3 rounded-lg text-[13px] font-medium text-white flex items-center gap-1.5 hover:opacity-90 transition-opacity"
           style={{ background: `linear-gradient(135deg, ${C.indigo}, ${C.violet})` }}
         >
