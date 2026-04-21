@@ -34,7 +34,12 @@ export type Cycle = {
 export type Alert = { sev: 'HIGH' | 'MED' | 'LOW'; t: string };
 
 export type Snapshot = {
-  k: string; v: string; d: string; g: boolean;
+  k: string;
+  vals: {
+    '30d': { v: string; d: string; g: boolean };
+    '60d': { v: string; d: string; g: boolean };
+    '90d': { v: string; d: string; g: boolean };
+  };
 };
 
 export type TrendMetric = {
