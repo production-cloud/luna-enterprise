@@ -19,7 +19,7 @@ export const LunaLayout: React.FC = () => {
   const data = getPatientData(patient.id);
 
   return (
-    <div className="min-h-screen" style={{ background: C.bg }}>
+    <div className="min-h-screen luna-shell" style={{ background: C.bg }}>
       <Sidebar expanded={expanded} onHover={setExpanded} />
       <div style={{ marginLeft: 64 }}>
         <TopBar patient={patient} onSelectPatient={setPatient} />

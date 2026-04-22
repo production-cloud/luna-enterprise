@@ -154,6 +154,7 @@ All colors MUST be HSL.
   .dark .bg-slate-50 { background-color: rgba(148,163,184,0.05) !important; }
   .dark .bg-slate-100 { background-color: rgba(148,163,184,0.10) !important; }
   .dark .hover\:bg-slate-50:hover { background-color: rgba(148,163,184,0.08) !important; }
+  .dark .luna-shell { background: #0B1220 !important; }
 
   .fade-in {
     animation: lunaFadeIn 350ms ease both;
