@@ -19,10 +19,10 @@ export type Patient = {
 };
 
 export const PATIENTS: Patient[] = [
-  { id: 'priya',  name: 'Priya Sharma',  age: 31, sync: 'Apr 20 2026', days: 127, alert: 'amber' },
-  { id: 'ananya', name: 'Ananya Mehta',  age: 28, sync: 'Apr 18 2026', days: 89,  alert: 'red'   },
-  { id: 'deepa',  name: 'Deepa Nair',    age: 35, sync: 'Apr 15 2026', days: 203, alert: 'green' },
-  { id: 'riya',   name: 'Riya Kapoor',   age: 33, sync: 'Apr 10 2026', days: 156, alert: 'green' },
+  { id: 'priya',  name: 'Jane Doe 1',  age: 31, sync: 'Apr 20 2026', days: 127, alert: 'amber' },
+  { id: 'ananya', name: 'Jane Doe 2',  age: 28, sync: 'Apr 18 2026', days: 89,  alert: 'red'   },
+  { id: 'deepa',  name: 'Jane Doe 3',  age: 35, sync: 'Apr 15 2026', days: 203, alert: 'green' },
+  { id: 'riya',   name: 'Jane Doe 4',  age: 33, sync: 'Apr 10 2026', days: 156, alert: 'green' },
 ];
 
 export type Cycle = {
