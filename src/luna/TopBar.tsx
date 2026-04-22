@@ -19,7 +19,7 @@ export const TopBar: React.FC<Props> = ({ patient, onSelectPatient }) => {
   const handleDownload = () => {
     try {
       downloadPatientSummary(patient, getPatientData(patient.id));
-      toast.success(`Downloading ${patient.name.split(' ')[0]}'s summary`);
+      toast.success(`Downloading ${patient.name}'s summary`);
     } catch (e) {
       toast.error('Failed to generate PDF');
     }
@@ -41,7 +41,7 @@ export const TopBar: React.FC<Props> = ({ patient, onSelectPatient }) => {
           className="h-9 px-2.5 flex items-center gap-2 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
         >
           <GradientAvatar name={patient.name} size={22} />
-          <span className="text-[13px] font-medium text-slate-800">{patient.name.split(' ')[0]}</span>
+          <span className="text-[13px] font-medium text-slate-800">{patient.name}</span>
           <AlertDot alert={patient.alert} size={7} />
           <span className="text-slate-400"><IconChevron /></span>
         </button>
