@@ -192,8 +192,12 @@ const PhaseBars: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
           const segs = phaseDays(c);
           return (
             <div key={c.id} className="flex items-center gap-3">
-              <div className="w-20 text-[12px] text-slate-600">
-                <span className="font-semibold">{c.id}</span> <span className="mono text-slate-400">{c.len}d</span>
+              <div className="w-48 text-[12px] text-slate-600 shrink-0">
+                <span className="font-semibold">{c.id}</span>{' '}
+                <span className="mono text-slate-400">{c.len}d</span>
+                <div className="mono text-[10.5px] text-slate-400 leading-tight mt-0.5">
+                  {c.start} – {c.end}
+                </div>
               </div>
               <div className="relative flex-1">
                 <div className="h-5 rounded-lg overflow-hidden flex">
