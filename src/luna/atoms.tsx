@@ -2,17 +2,17 @@ import React from 'react';
 import { C } from './data';
 
 export const StatusPill: React.FC<{ s: string }> = ({ s }) => {
-  const map: Record<string, { bg: string; fg: string; dot: string }> = {
-    Optimal:        { bg: '#ECFDF5', fg: '#065F46', dot: C.ok },
-    Normal:         { bg: '#F1F5F9', fg: '#334155', dot: C.normal },
-    'Below Target': { bg: '#FFFBEB', fg: '#92400E', dot: C.low },
-    Flag:           { bg: '#FEF2F2', fg: '#991B1B', dot: C.flag },
+  const map: Record<string, { panel: string; fg: string; dot: string }> = {
+    Optimal:        { panel: 'luna-soft-panel-success', fg: '#065F46', dot: C.ok },
+    Normal:         { panel: 'luna-soft-panel',         fg: '#334155', dot: C.normal },
+    'Below Target': { panel: 'luna-soft-panel-warn',    fg: '#92400E', dot: C.low },
+    Flag:           { panel: 'luna-soft-panel-danger',  fg: '#991B1B', dot: C.flag },
   };
   const m = map[s] ?? map.Normal;
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium"
-      style={{ background: m.bg, color: m.fg }}
+      className={`${m.panel} inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium`}
+      style={{ color: m.fg }}
     >
       <span className="h-1.5 w-1.5 rounded-full" style={{ background: m.dot }} />
       {s}
@@ -22,15 +22,15 @@ export const StatusPill: React.FC<{ s: string }> = ({ s }) => {
 
 export const SevPill: React.FC<{ s: 'HIGH' | 'MED' | 'LOW' }> = ({ s }) => {
   const map = {
-    HIGH: { bg: '#FEE2E2', fg: '#991B1B' },
-    MED:  { bg: '#FEF3C7', fg: '#92400E' },
-    LOW:  { bg: '#F1F5F9', fg: '#334155' },
+    HIGH: { panel: 'luna-soft-panel-danger', fg: '#991B1B' },
+    MED:  { panel: 'luna-soft-panel-warn',   fg: '#92400E' },
+    LOW:  { panel: 'luna-soft-panel',        fg: '#334155' },
   } as const;
   const m = map[s];
   return (
     <span
-      className="rounded px-2 py-0.5 text-[10px] font-bold tracking-wide"
-      style={{ background: m.bg, color: m.fg }}
+      className={`${m.panel} rounded px-2 py-0.5 text-[10px] font-bold tracking-wide`}
+      style={{ color: m.fg }}
     >
       {s}
     </span>

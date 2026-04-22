@@ -10,10 +10,9 @@ export default function Partner() {
   return (
     <div className="space-y-4">
       <div
-        className="flex items-start gap-2.5 px-4 py-2.5 rounded-lg text-[12px] text-slate-600"
-        style={{ background: 'rgb(241 245 249 / 0.7)' }}
+        className="luna-soft-panel flex items-start gap-2.5 px-4 py-2.5 rounded-lg text-[12px]"
       >
-        <span className="text-slate-400 mt-0.5"><IconInfo /></span>
+        <span className="mt-0.5 luna-soft-panel-meta"><IconInfo /></span>
         <span>Partner health data is supplementary and optional.</span>
       </div>
 
@@ -24,8 +23,8 @@ export default function Partner() {
             <div className="text-[13px] text-slate-500 mt-1">{ctx.data.partnerDate}</div>
           </div>
           <span
-            className="text-[11px] font-medium px-2 py-0.5 rounded-full"
-            style={{ background: '#ECFDF5', color: '#065F46' }}
+            className="luna-soft-panel-success text-[11px] font-medium px-2 py-0.5 rounded-full"
+            style={{ color: '#065F46' }}
           >
             {ctx.data.partnerStatus}
           </span>

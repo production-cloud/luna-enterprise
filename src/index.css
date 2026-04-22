@@ -156,36 +156,50 @@ All colors MUST be HSL.
   .dark .hover\:bg-slate-50:hover { background-color: rgba(148,163,184,0.08) !important; }
   .dark .luna-shell { background: #0B1220 !important; }
 
-  /* Re-darken text inside light pastel-background containers in dark mode,
-     so alert/insight/info strips remain readable. */
-  .dark [style*="#FEF2F2"],
-  .dark [style*="#FFFBEB"],
-  .dark [style*="#ECFDF5"],
-  .dark [style*="#EEF2FF"],
-  .dark [style*="#F1F5F9"],
-  .dark [style*="#FEF3C7"],
-  .dark [style*="rgb(241 245 249"],
-  .dark [style*="rgb(238 242 255"],
-  .dark [style*="rgb(236 253 245"],
-  .dark [style*="rgb(254 243 199"],
-  .dark [style*="rgb(255 251 235"],
-  .dark [style*="rgb(254 242 242"] {
-    color: #1E293B !important;
-  }
-  .dark [style*="#FEF2F2"] *,
-  .dark [style*="#FFFBEB"] *,
-  .dark [style*="#ECFDF5"] *,
-  .dark [style*="#EEF2FF"] *,
-  .dark [style*="#F1F5F9"] *,
-  .dark [style*="#FEF3C7"] *,
-  .dark [style*="rgb(241 245 249"] *,
-  .dark [style*="rgb(238 242 255"] *,
-  .dark [style*="rgb(236 253 245"] *,
-  .dark [style*="rgb(254 243 199"] *,
-  .dark [style*="rgb(255 251 235"] *,
-  .dark [style*="rgb(254 242 242"] * {
-    color: inherit !important;
-  }
+  /* ----- Semantic pastel surface classes (readable in light + dark) ----- */
+  .luna-soft-panel        { background-color: #F1F5F9; color: #1E293B; }
+  .luna-soft-panel-danger { background-color: #FEF2F2; color: #1E293B; }
+  .luna-soft-panel-warn   { background-color: #FFFBEB; color: #1E293B; }
+  .luna-soft-panel-info   { background-color: #EEF2FF; color: #1E293B; }
+  .luna-soft-panel-success{ background-color: #ECFDF5; color: #1E293B; }
+
+  .luna-soft-panel-title  { color: #0F172A; font-weight: 600; }
+  .luna-soft-panel-meta   { color: #475569; }
+
+  /* Force readable dark-slate text inside any soft panel, even when child
+     elements use tailwind text-slate-* utilities that the global dark-mode
+     overrides would otherwise repaint. */
+  .dark .luna-soft-panel,
+  .dark .luna-soft-panel-danger,
+  .dark .luna-soft-panel-warn,
+  .dark .luna-soft-panel-info,
+  .dark .luna-soft-panel-success { color: #1E293B !important; }
+
+  .dark .luna-soft-panel .text-slate-800,
+  .dark .luna-soft-panel .text-slate-700,
+  .dark .luna-soft-panel .text-slate-600,
+  .dark .luna-soft-panel .text-slate-500,
+  .dark .luna-soft-panel .text-slate-400,
+  .dark .luna-soft-panel-danger .text-slate-800,
+  .dark .luna-soft-panel-danger .text-slate-700,
+  .dark .luna-soft-panel-danger .text-slate-600,
+  .dark .luna-soft-panel-danger .text-slate-500,
+  .dark .luna-soft-panel-danger .text-slate-400,
+  .dark .luna-soft-panel-warn .text-slate-800,
+  .dark .luna-soft-panel-warn .text-slate-700,
+  .dark .luna-soft-panel-warn .text-slate-600,
+  .dark .luna-soft-panel-warn .text-slate-500,
+  .dark .luna-soft-panel-warn .text-slate-400,
+  .dark .luna-soft-panel-info .text-slate-800,
+  .dark .luna-soft-panel-info .text-slate-700,
+  .dark .luna-soft-panel-info .text-slate-600,
+  .dark .luna-soft-panel-info .text-slate-500,
+  .dark .luna-soft-panel-info .text-slate-400,
+  .dark .luna-soft-panel-success .text-slate-800,
+  .dark .luna-soft-panel-success .text-slate-700,
+  .dark .luna-soft-panel-success .text-slate-600,
+  .dark .luna-soft-panel-success .text-slate-500,
+  .dark .luna-soft-panel-success .text-slate-400 { color: #334155 !important; }
 
   .fade-in {
     animation: lunaFadeIn 350ms ease both;
