@@ -115,12 +115,6 @@ const MetricCard: React.FC<{ m: TrendMetric }> = ({ m }) => {
             <div key={c.p} className="text-center">
               <div className="eyebrow text-slate-400">{c.p}</div>
               <div className="mono text-[14px] font-semibold text-slate-800 mt-1">{c.v}</div>
-              <div
-                className="mono text-[11px] font-medium mt-0.5"
-                style={{ color: m.stroke }}
-              >
-                {arrowFor(i)}
-              </div>
             </div>
           ))}
         </div>
