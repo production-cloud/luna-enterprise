@@ -156,6 +156,37 @@ All colors MUST be HSL.
   .dark .hover\:bg-slate-50:hover { background-color: rgba(148,163,184,0.08) !important; }
   .dark .luna-shell { background: #0B1220 !important; }
 
+  /* Re-darken text inside light pastel-background containers in dark mode,
+     so alert/insight/info strips remain readable. */
+  .dark [style*="#FEF2F2"],
+  .dark [style*="#FFFBEB"],
+  .dark [style*="#ECFDF5"],
+  .dark [style*="#EEF2FF"],
+  .dark [style*="#F1F5F9"],
+  .dark [style*="#FEF3C7"],
+  .dark [style*="rgb(241 245 249"],
+  .dark [style*="rgb(238 242 255"],
+  .dark [style*="rgb(236 253 245"],
+  .dark [style*="rgb(254 243 199"],
+  .dark [style*="rgb(255 251 235"],
+  .dark [style*="rgb(254 242 242"] {
+    color: #1E293B !important;
+  }
+  .dark [style*="#FEF2F2"] *,
+  .dark [style*="#FFFBEB"] *,
+  .dark [style*="#ECFDF5"] *,
+  .dark [style*="#EEF2FF"] *,
+  .dark [style*="#F1F5F9"] *,
+  .dark [style*="#FEF3C7"] *,
+  .dark [style*="rgb(241 245 249"] *,
+  .dark [style*="rgb(238 242 255"] *,
+  .dark [style*="rgb(236 253 245"] *,
+  .dark [style*="rgb(254 243 199"] *,
+  .dark [style*="rgb(255 251 235"] *,
+  .dark [style*="rgb(254 242 242"] * {
+    color: inherit !important;
+  }
+
   .fade-in {
     animation: lunaFadeIn 350ms ease both;
   }
