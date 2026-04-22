@@ -1,36 +1,68 @@
 
 
-# Three Overview Card Fixes
+# Luna x Hospital — Content, Insights & Dark Mode
 
-## 1. Phase ring — proportional, not broken
-In `Overview.tsx` `PhaseRing`, the segment math uses hardcoded follicular = `ovDay - 6` and luteal = `len - 5 - (ovDay-6) - 1`, which can go negative or oversized for non-Priya patients (e.g. Ananya len=36, ovDay=21 → luteal becomes huge). Fix the proportions to clinically realistic, always-positive values:
+## 1. Rename + sample patients
+- Sidebar: "Luna x Motherhood" → **"Luna x Hospital"**
+- Patients in `data.ts`: Priya/Ananya/Deepa/Riya → **"Jane Doe 1/2/3/4"** (keep ages, sync info, alert states; update initials to "J1"/"J2"/etc. on avatars)
+- Update all PDF headers, breadcrumbs, file names (`Luna_JaneDoe1_Summary.pdf`)
 
-- Menstrual = period days (from cycle data; default 5)
-- Follicular = `ovDay - period` (days between period end and ovulation)
-- Ovulation = 1
-- Luteal = `len - ovDay`
+## 2. Remove all Omega-3 / fish-oil references
+- **Blood panel** (`data.ts`): drop the Omega-3 Index marker row + `bloodWarning` referencing it for every patient
+- **Supplements** (`data.ts`): remove Fish Oil / Omega-3 entries
+- **Insights**: replace any omega-3 driven insight with the new creatine/sleep-latency one (see §6)
+- **PDF generator**: nothing special — it reads from data, will follow
 
-Rebuild the dasharray loop so each arc length = `(days/total)*circ - gap` with `Math.max(..., 6)` floor so no segment collapses, and verify offsets reset cleanly. Result: visibly different proportions per phase (small Menstrual + Ovulation, larger Follicular + Luteal), no broken/overlapping arcs at the top.
+## 3. Cycle & Temperature — add start/end dates to phase distribution
+In `Cycle.tsx` `PhaseBars`, each cycle row (C1–C4) currently shows just the label. Add the cycle's start–end date next to the label, pulled from existing per-cycle metadata (e.g. "C1 · Oct 12 – Nov 8"). Add `start` and `end` strings per cycle in `data.ts` for all patients. No layout overhaul — just append a small slate-400 mono date string after the label.
 
-## 2. Biomarker Snapshot — 30/60/90d actually swaps values
-Today only a footer note changes. Restructure `snapshot` in `data.ts` so each metric carries three value/delta pairs:
+## 4. Biomarkers — remove sparkline, redesign 90/60/30d
+In `Biomarkers.tsx` `MetricCard`:
+- Delete the Recharts `LineChart` block entirely
+- Replace the existing 3-column 90d/60d/30d row with a cleaner version: same 3 columns, but with subtle delta arrows (↑/↓/→) under each value in the metric's accent color, and a thin horizontal divider above. Same card chrome, fonts, spacing — just no chart.
 
-```ts
-snapshot: [
-  { k:'Resting HR', vals:{ '30d':{v:'62 bpm',d:'stable',g:false}, '60d':{v:'63 bpm',d:'↓ −1', g:true}, '90d':{v:'64 bpm',d:'↓ −2 bpm', g:true} } },
-  ...
-]
-```
+## 5. AI Insights — rewrite all copy (factual, soft, non-prescriptive)
+Apply this principle everywhere insights appear (Overview alerts, Insights page alerts + pattern cards, Health Clone strengths/concerns, footer notes, PDF):
 
-Add realistic 30/60/90d values for all 4 patients (HR, HRV, Sleep Quality, Stress, SpO₂). The toggle reads `r.vals[range]` and re-renders. Remove the now-redundant "30-day window" footer line.
+**Rules**
+- Use hedged language: "could be", "appears to", "tends to", "observed"
+- No imperatives, no "flag for review", no "may impact X regulation"
+- Strip exact percentage/point claims when they sound like a verdict; keep numbers when they're descriptive
+- Keep the 3 "good" examples as-is
 
-## 3. Sleep card — show avg in top right
-Add `avg {X.Xh}` (mono, slate-400) to the right of the "Sleep · last 14 nights" eyebrow, mirroring the screenshot. Compute it from `ctx.data.sleep14` (`sum/14`, 1 decimal). No other layout change.
+**Specific rewrites**
+- "Sleep debt 3.2h sustained over 14 days — flag for endocrine review" → **"Sleep averaging ~3h below target across the last 14 nights"**
+- "Stress down 21% over 90 days, Ashwagandha at 3pm correlating" → **"Stress trending lower over the last 90 days; Ashwagandha taken mid-afternoon on most of those days"**
+- "Caffeine after 3pm linked to reduced deep sleep" → **"Caffeine after 3pm could be linked to reduced deep sleep on the same night"**
+- "Protein-first breakfasts raise Peak Score 7.2 pts" → **"Mornings starting with a protein-first meal tend to coincide with higher Readiness Scores later that day"**
+- Omega-3 insight (any phrasing) → **"On days creatine was taken, sleep latency appeared a few minutes longer than baseline"**
+- Audit every other insight string in `data.ts` (per patient: `insights[]`, `insightsAlerts[]`, `strengths[]`, `concerns[]`, Overview `alertStrip`) and apply the same softening pass. Keep the trio:
+  - "HRV recovers 2 days faster with magnesium on travel days"
+  - "Biphasic shift regular across all 4 cycles, consistent progesterone pattern"
+  - "Walking 6x/week strongest HRV correlator, −6ms on rest days"
+
+## 6. "Peak Score" → "Readiness Score"
+Global rename across `data.ts`, `Overview.tsx`, `Insights.tsx`, PDF generator, and any tooltip/legend strings.
+
+## 7. Dark mode toggle (bottom of sidebar)
+- Add a small footer block inside `Sidebar.tsx` (below nav, above bottom edge) with a sun/moon icon + the existing shadcn `Switch`. Label "Dark mode" only when sidebar is expanded.
+- State managed by a tiny `useTheme` hook: reads `localStorage.luna.theme` (default `'light'`), toggles `document.documentElement.classList` for `.dark`.
+- Add dark-mode CSS variables in `index.css` for the existing token names (bg, card, sidebar stays dark, text, borders) so all current Tailwind/`C` usages adapt. Cards, top bar, tables, alerts get dark equivalents (`#0B1220` bg, `#111827` cards, slate-200 text, slate-700 borders). Recharts strokes/fills already use the `C` tokens — adjust those tokens via CSS variables read in JS, OR add a `useTheme()` returned palette object passed to charts.
+- Sidebar itself stays dark in both modes (already `#0F172A`).
+- Default = light, so existing users see no change until they flip the switch.
 
 ## Files touched
-- `src/luna/data.ts` — restructure `snapshot` per patient with 30/60/90d values; update `Snapshot` type
-- `src/luna/pages/Overview.tsx` — fix `PhaseRing` proportions, wire range toggle to `vals[range]`, add avg sleep header
-- `src/luna/pdf.ts` — adjust if it reads `snapshot[i].v` directly (use `vals['30d'].v` as default)
+- `src/luna/data.ts` — rename patients, drop Omega-3 + Fish Oil, add cycle start/end dates, rewrite all insight strings, Peak→Readiness
+- `src/luna/Sidebar.tsx` — title rename, dark mode toggle footer
+- `src/luna/TopBar.tsx` — patient initials/avatar update
+- `src/luna/pages/Overview.tsx` — Readiness rename, softened alert strip copy
+- `src/luna/pages/Cycle.tsx` — phase distribution date labels
+- `src/luna/pages/Biomarkers.tsx` — remove sparkline, redesign 90/60/30d row
+- `src/luna/pages/Insights.tsx` — softened copy (data-driven, mostly auto)
+- `src/luna/pages/Lifestyle.tsx` — drop Fish Oil row (auto via data)
+- `src/luna/pdf.ts` — Luna x Hospital header, JaneDoe filenames, Readiness rename
+- `src/luna/hooks/useTheme.ts` — new
+- `src/index.css` — dark-mode CSS variables
 
-No visual changes beyond the three fixes.
+No structural UI changes beyond removing the sparkline and adding the dark mode toggle.
 
