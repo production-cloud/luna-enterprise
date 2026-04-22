@@ -59,14 +59,19 @@ export const Eyebrow: React.FC<React.PropsWithChildren<{ className?: string }>> 
 );
 
 export const GradientAvatar: React.FC<{ name: string; size?: number }> = ({ name, size = 28 }) => {
-  const initial = name.charAt(0).toUpperCase();
+  // Use first letter + trailing digit if present (e.g. "Jane Doe 1" -> "J1"),
+  // otherwise fall back to the first character.
+  const trailingDigit = name.trim().match(/(\d+)$/)?.[1];
+  const initial = trailingDigit
+    ? `${name.charAt(0).toUpperCase()}${trailingDigit}`
+    : name.charAt(0).toUpperCase();
   return (
     <div
       className="rounded-full flex items-center justify-center text-white font-semibold"
       style={{
         width: size,
         height: size,
-        fontSize: size * 0.42,
+        fontSize: size * (initial.length > 1 ? 0.34 : 0.42),
         background: `linear-gradient(135deg, ${C.indigo}, ${C.violet})`,
       }}
     >

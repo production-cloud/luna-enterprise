@@ -1,13 +1,20 @@
 import React from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { toast } from 'sonner';
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { C, type TrendMetric } from '../data';
 import type { LunaCtx } from '../Layout';
 import { Eyebrow, StatusPill } from '../atoms';
 
 const MetricCard: React.FC<{ m: TrendMetric }> = ({ m }) => {
-  const data = m.line.map((v, i) => ({ i, v }));
+  // Direction is inferred by comparing the first to the last value of the trend line.
+  // For each column we approximate a delta vs the previous period in the cols array.
+  const arrowFor = (idx: number): string => {
+    if (idx === 0) return '→';
+    const prev = parseFloat(m.cols[idx - 1].v);
+    const curr = parseFloat(m.cols[idx].v);
+    if (Number.isNaN(prev) || Number.isNaN(curr) || curr === prev) return '→';
+    return curr > prev ? '↑' : '↓';
+  };
   return (
     <div className="luna-card p-5">
       <Eyebrow>{m.label}</Eyebrow>
@@ -20,20 +27,21 @@ const MetricCard: React.FC<{ m: TrendMetric }> = ({ m }) => {
       >
         {m.badge}
       </span>
-      <div className="grid grid-cols-3 gap-2 mt-4">
-        {m.cols.map((c) => (
-          <div key={c.p} className="text-center">
-            <div className="eyebrow text-slate-400">{c.p}</div>
-            <div className="mono text-[13px] font-semibold text-slate-700 mt-0.5">{c.v}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ height: 50 }} className="mt-3">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <Line type="monotone" dataKey="v" stroke={m.stroke} strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="mt-5 pt-3 border-t border-slate-100">
+        <div className="grid grid-cols-3 gap-2">
+          {m.cols.map((c, i) => (
+            <div key={c.p} className="text-center">
+              <div className="eyebrow text-slate-400">{c.p}</div>
+              <div className="mono text-[14px] font-semibold text-slate-800 mt-1">{c.v}</div>
+              <div
+                className="mono text-[11px] font-medium mt-0.5"
+                style={{ color: m.stroke }}
+              >
+                {arrowFor(i)}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

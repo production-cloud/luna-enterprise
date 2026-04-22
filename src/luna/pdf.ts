@@ -45,7 +45,7 @@ export function downloadPatientSummary(patient: Patient, data: PatientData) {
   doc.setFillColor(91, 79, 207);
   doc.rect(0, 0, pageW, 6, 'F');
   doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(91, 79, 207);
-  doc.text('LUNA LIFEOS · CLINICAL SUMMARY', margin, y); y += 18;
+  doc.text('LUNA x HOSPITAL · CLINICAL SUMMARY', margin, y); y += 18;
   h1(`${patient.name} · Age ${patient.age}`);
   p(`Last sync: ${patient.sync}  ·  ${patient.days} days continuous monitoring`, [100, 116, 139]);
   p(`Generated: ${new Date().toLocaleString()}`, [148, 163, 184]);
@@ -127,7 +127,7 @@ export function downloadPatientSummary(patient: Patient, data: PatientData) {
   doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(148, 163, 184);
   ensureSpace(20);
   y += 10;
-  doc.text('Luna LifeOS · AI-generated correlational summary. Not diagnostic. Interpret alongside clinical judgment.', margin, y);
+  doc.text('Luna x Hospital · AI-generated correlational summary. Not diagnostic. Interpret alongside clinical judgment.', margin, y);
 
-  doc.save(`Luna_${patient.name.replace(/\s+/g, '_')}_Summary.pdf`);
+  doc.save(`Luna_${patient.name.replace(/\s+/g, '')}_Summary.pdf`);
 }

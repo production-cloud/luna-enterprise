@@ -205,7 +205,7 @@ const FooterStrip: React.FC<{ patient: Patient }> = ({ patient }) => {
       </div>
       <button
         onClick={() => {
-          try { downloadPatientSummary(patient, data); toast.success(`Downloading ${patient.name.split(' ')[0]}'s summary`); }
+          try { downloadPatientSummary(patient, data); toast.success(`Downloading ${patient.name}'s summary`); }
           catch { toast.error('Failed to generate PDF'); }
         }}
         className="text-[12.5px] font-medium hover:underline"
