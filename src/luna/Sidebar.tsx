@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Moon, Sun } from 'lucide-react';
 import { C, PAGES } from './data';
 import { LunaLogo } from './atoms';
 import { IconOverview, IconCycle, IconBio, IconLifestyle, IconSparkle, IconPartner } from './icons';
+import { Switch } from '@/components/ui/switch';
+import { useTheme } from './hooks/useTheme';
 
 const ICONS: Record<string, React.FC> = {
   overview: IconOverview,
@@ -17,6 +20,8 @@ type Props = { expanded: boolean; onHover: (v: boolean) => void };
 
 export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
   const loc = useLocation();
+  const { theme, toggle } = useTheme();
+  const dark = theme === 'dark';
   return (
     <aside
       onMouseEnter={() => onHover(true)}
@@ -36,7 +41,7 @@ export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
           className="overflow-hidden whitespace-nowrap"
           style={{ opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}
         >
-           <div className="text-white text-[13px] font-semibold leading-tight">Luna x Motherhood</div>
+           <div className="text-white text-[13px] font-semibold leading-tight">Luna x Hospital</div>
           <div className="eyebrow text-slate-500 leading-tight">Clinical</div>
         </div>
       </div>
@@ -80,6 +85,27 @@ export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
           );
         })}
       </nav>
+
+      <div className="border-t border-white/5 px-3 py-3">
+        <div className="flex items-center gap-3 h-9">
+          <span className="shrink-0 flex items-center justify-center w-[18px] text-slate-300">
+            {dark ? <Moon size={16} /> : <Sun size={16} />}
+          </span>
+          <span
+            className="flex-1 text-[12.5px] font-medium text-slate-300 whitespace-nowrap overflow-hidden"
+            style={{ opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}
+          >
+            Dark mode
+          </span>
+          {expanded && (
+            <Switch
+              checked={dark}
+              onCheckedChange={toggle}
+              aria-label="Toggle dark mode"
+            />
+          )}
+        </div>
+      </div>
     </aside>
   );
 };
