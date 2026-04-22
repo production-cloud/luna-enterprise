@@ -169,8 +169,8 @@ export default function Biomarkers() {
         </div>
         {ctx.data.bloodWarning && (
           <div
-            className="mt-4 p-3 rounded-lg text-[12.5px]"
-            style={{ background: '#FFFBEB', borderLeft: `3px solid ${C.low}`, color: '#92400E' }}
+            className="luna-soft-panel-warn mt-4 p-3 rounded-lg text-[12.5px]"
+            style={{ borderLeft: `3px solid ${C.low}`, color: '#92400E' }}
           >
             {ctx.data.bloodWarning}
           </div>

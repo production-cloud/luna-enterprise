@@ -11,8 +11,8 @@ export default function Lifestyle() {
         <div className="flex items-center justify-between mb-3">
           <Eyebrow>Supplements</Eyebrow>
           <span
-            className="text-[11px] font-medium px-2 py-0.5 rounded-full"
-            style={{ background: '#ECFDF5', color: '#065F46' }}
+            className="luna-soft-panel-success text-[11px] font-medium px-2 py-0.5 rounded-full"
+            style={{ color: '#065F46' }}
           >
             Avg adherence {ctx.data.suppsAvg}%
           </span>

@@ -8,16 +8,15 @@ import { IconInfo } from '../icons';
 export default function Insights() {
   const ctx = useOutletContext<LunaCtx>();
   const sevColor = (s: string) =>
-    s === 'HIGH' ? { color: C.flag, bg: '#FEF2F2' } :
-    s === 'MED'  ? { color: C.low,  bg: '#FFFBEB' } :
-                   { color: C.normal, bg: '#F1F5F9' };
+    s === 'HIGH' ? { color: C.flag,   panel: 'luna-soft-panel-danger' } :
+    s === 'MED'  ? { color: C.low,    panel: 'luna-soft-panel-warn'   } :
+                   { color: C.normal, panel: 'luna-soft-panel'        };
   return (
     <div className="space-y-4">
       <div
-        className="flex items-start gap-2.5 px-4 py-2.5 rounded-lg text-[12px] text-slate-600"
-        style={{ background: 'rgb(241 245 249 / 0.7)' }}
+        className="luna-soft-panel flex items-start gap-2.5 px-4 py-2.5 rounded-lg text-[12px]"
       >
-        <span className="text-slate-400 mt-0.5"><IconInfo /></span>
+        <span className="mt-0.5 luna-soft-panel-meta"><IconInfo /></span>
         <span>AI-generated correlational observations from wearable + lifestyle data. Not diagnostic. Always interpret alongside clinical judgment.</span>
       </div>
 
@@ -34,13 +33,13 @@ export default function Insights() {
             return (
               <div
                 key={i}
-                className="flex items-start gap-3 p-3 rounded-lg"
-                style={{ background: s.bg, borderLeft: `4px solid ${s.color}` }}
+                className={`${s.panel} flex items-start gap-3 p-3 rounded-lg`}
+                style={{ borderLeft: `4px solid ${s.color}` }}
               >
                 <span className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: s.color }} />
                 <div className="flex-1">
-                  <div className="text-[13px] font-semibold text-slate-800">{a.title}</div>
-                  <div className="text-[11px] text-slate-400 mt-1">Flag severity: {a.sev} · Luna AI Engine</div>
+                  <div className="text-[13px] luna-soft-panel-title">{a.title}</div>
+                  <div className="text-[11px] luna-soft-panel-meta mt-1">Flag severity: {a.sev} · Luna AI Engine</div>
                 </div>
               </div>
             );
@@ -62,12 +61,12 @@ export default function Insights() {
           {ctx.data.insights.map((i, idx) => (
             <div
               key={idx}
-              className="p-3.5 rounded-lg border transition-colors hover:border-indigo-300"
-              style={{ background: 'rgb(238 242 255 / 0.4)', borderColor: '#E0E7FF' }}
+              className="luna-soft-panel-info p-3.5 rounded-lg border transition-colors hover:border-indigo-300"
+              style={{ borderColor: '#E0E7FF' }}
             >
               <div className="flex items-start gap-2">
                 <span className="text-base">💡</span>
-                <div className="text-[12.5px] text-slate-700 leading-snug">{i.t}</div>
+                <div className="text-[12.5px] leading-snug luna-soft-panel-title">{i.t}</div>
               </div>
               <div className="mt-2.5 flex items-center gap-2">
                 <div className="flex-1 h-1 rounded-full bg-indigo-100">
@@ -83,17 +82,17 @@ export default function Insights() {
       <div className="luna-card p-5">
         <Eyebrow className="mb-3">Health clone summary</Eyebrow>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="p-4 rounded-lg border" style={{ background: 'rgb(236 253 245 / 0.6)', borderColor: '#A7F3D0' }}>
+          <div className="luna-soft-panel-success p-4 rounded-lg border" style={{ borderColor: '#A7F3D0' }}>
             <div className="eyebrow text-emerald-700 mb-2">Strengths</div>
-            <ul className="space-y-1.5 text-[12.5px] text-slate-700">
+            <ul className="space-y-1.5 text-[12.5px] luna-soft-panel-title">
               {ctx.data.strengths.map((s) => (
                 <li key={s}><span className="text-emerald-600 font-bold mr-1">✓</span>{s}</li>
               ))}
             </ul>
           </div>
-          <div className="p-4 rounded-lg border" style={{ background: 'rgb(254 243 199 / 0.6)', borderColor: '#FDE68A' }}>
+          <div className="luna-soft-panel-warn p-4 rounded-lg border" style={{ borderColor: '#FDE68A' }}>
             <div className="eyebrow text-amber-700 mb-2">Concerns</div>
-            <ul className="space-y-1.5 text-[12.5px] text-slate-700">
+            <ul className="space-y-1.5 text-[12.5px] luna-soft-panel-title">
               {ctx.data.concerns.map((c) => (
                 <li key={c}><span className="text-amber-600 font-bold mr-1">⚠</span>{c}</li>
               ))}

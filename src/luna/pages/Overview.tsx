@@ -11,9 +11,9 @@ import { downloadPatientSummary } from '../pdf';
 
 const AlertStrip: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
   const sevColor = (s: string) =>
-    s === 'HIGH' ? { color: C.flag, bg: '#FEF2F2' } :
-    s === 'MED'  ? { color: C.low,  bg: '#FFFBEB' } :
-                   { color: C.normal, bg: '#F1F5F9' };
+    s === 'HIGH' ? { color: C.flag,   panel: 'luna-soft-panel-danger' } :
+    s === 'MED'  ? { color: C.low,    panel: 'luna-soft-panel-warn'   } :
+                   { color: C.normal, panel: 'luna-soft-panel'        };
   return (
     <div className="luna-card p-4">
       <div className="flex items-center gap-3 mb-3">
@@ -28,11 +28,11 @@ const AlertStrip: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
           return (
             <div
               key={i}
-              className="flex-1 min-w-[260px] flex items-start gap-3 p-3 rounded-lg"
-              style={{ background: s.bg, borderLeft: `2px solid ${s.color}` }}
+              className={`${s.panel} flex-1 min-w-[260px] flex items-start gap-3 p-3 rounded-lg`}
+              style={{ borderLeft: `2px solid ${s.color}` }}
             >
               <span className="text-[10px] font-bold tracking-wide" style={{ color: s.color }}>{a.sev}</span>
-              <span className="text-[12.5px] text-slate-700 leading-snug">{a.t}</span>
+              <span className="text-[12.5px] leading-snug luna-soft-panel-title">{a.t}</span>
             </div>
           );
         })}
@@ -142,8 +142,8 @@ const BiomarkerSnapshot: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
         ))}
       </div>
       <div
-        className="mt-4 px-3 py-2 rounded-lg text-[12px] font-medium"
-        style={{ background: '#ECFDF5', color: '#065F46' }}
+        className="luna-soft-panel-success mt-4 px-3 py-2 rounded-lg text-[12px] font-medium"
+        style={{ color: '#065F46' }}
       >
         {ctx.data.snapshotCallout}
       </div>
@@ -186,8 +186,8 @@ const SleepSummary: React.FC<{ ctx: LunaCtx }> = ({ ctx }) => {
         ))}
       </div>
       <div
-        className="mt-3 px-3 py-2 rounded-lg text-[12px]"
-        style={{ background: '#FFFBEB', color: '#92400E' }}
+        className="luna-soft-panel-warn mt-3 px-3 py-2 rounded-lg text-[12px]"
+        style={{ color: '#92400E' }}
       >
         {ctx.data.sleepCallout}
       </div>
