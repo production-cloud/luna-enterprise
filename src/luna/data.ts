@@ -110,9 +110,9 @@ const buildTemps = (len: number, ovDay: number, baseLow: number, baseHigh: numbe
 // =====================================================
 const PRIYA: PatientData = {
   alerts: [
-    { sev: 'HIGH', t: 'Sleep debt 3.2h — may impact reproductive hormone regulation' },
-    { sev: 'MED',  t: 'Omega-3 index 6.8% — below 8% optimal. Retest in 6 months' },
-    { sev: 'MED',  t: 'Caffeine after 3pm linked to reduced deep sleep' },
+    { sev: 'HIGH', t: 'Sleep averaging ~3h below target across the last 14 nights' },
+    { sev: 'MED',  t: 'On days creatine was taken, sleep latency appeared a few minutes longer than baseline' },
+    { sev: 'MED',  t: 'Caffeine after 3pm could be linked to reduced deep sleep on the same night' },
   ],
   phase: { name: 'Luteal', day: 12, cycleNo: 4, len: 30, ovDay: 15 },
   snapshot: [
@@ -128,13 +128,13 @@ const PRIYA: PatientData = {
   sleepCallout: '☕ Caffeine after 3pm costs 41 min deep sleep',
   monitoring: { days: 127, lastSync: 'Apr 20, 2026' },
   cycles: [
-    { id:'C1', start:'Dec 15 2025', end:'Dec 19', period:5, len:28, ov:'Dec 28', ovDay:14, notes:'—', flag:false,
+    { id:'C1', start:'Dec 15 2025', end:'Jan 11 2026', period:5, len:28, ov:'Dec 28', ovDay:14, notes:'—', flag:false,
       temps: buildTemps(28, 14, 92.0, 93.2) },
-    { id:'C2', start:'Jan 12 2026', end:'Jan 17', period:6, len:29, ov:'Jan 25', ovDay:14, notes:'Period +1d', flag:true,
+    { id:'C2', start:'Jan 12 2026', end:'Feb 9 2026', period:6, len:29, ov:'Jan 25', ovDay:14, notes:'Period +1d', flag:true,
       temps: buildTemps(29, 14, 92.1, 93.3) },
-    { id:'C3', start:'Feb 10 2026', end:'Feb 14', period:5, len:28, ov:'Feb 23', ovDay:14, notes:'—', flag:false,
+    { id:'C3', start:'Feb 10 2026', end:'Mar 9 2026', period:5, len:28, ov:'Feb 23', ovDay:14, notes:'—', flag:false,
       temps: buildTemps(28, 14, 92.0, 93.1) },
-    { id:'C4', start:'Mar 10 2026', end:'Mar 15', period:6, len:30, ov:'Mar 24', ovDay:15, notes:'Cycle +2d, Period +1d', flag:true,
+    { id:'C4', start:'Mar 10 2026', end:'Apr 8 2026', period:6, len:30, ov:'Mar 24', ovDay:15, notes:'Cycle +2d, Period +1d', flag:true,
       temps: [92.6,92.5,92.4,92.5,92.3,92.4,92.3,92.2,92.1,92.0,92.1,92.0,92.1,92.0,92.4,92.8,93.0,93.1,93.2,93.3,93.2,93.4,93.3,93.2,93.3,93.1,93.2,93.0,92.9,92.7] },
   ],
   cycleAvg: { period: '5.5', len: '28.75 (SD 0.96)', sd: '0.96' },
