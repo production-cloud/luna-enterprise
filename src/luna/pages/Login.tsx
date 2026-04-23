@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setLoggedIn, verifyCredentials } from '../auth';
+import lunaLogo from '@/assets/luna-logo.png';
 
 const FONT = "'DM Sans', system-ui, sans-serif";
-
-const RingLogo: React.FC = () => (
-  <svg width="28" height="28" viewBox="0 0 40 40">
-    <defs>
-      <linearGradient id="loginRing" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#C4B5FD" />
-        <stop offset="40%" stopColor="#E9D5FF" />
-        <stop offset="70%" stopColor="#FBCFE8" />
-        <stop offset="100%" stopColor="#FDE68A" />
-      </linearGradient>
-    </defs>
-    <circle cx="20" cy="20" r="13" fill="none" stroke="url(#loginRing)" strokeWidth="5" strokeLinecap="round" />
-  </svg>
-);
 
 const IconBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
