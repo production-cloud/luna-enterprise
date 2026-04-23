@@ -140,7 +140,6 @@ const Login: React.FC = () => {
             }}
           >
             Fertility intelligence
-            <br />
             for your clinic
           </div>
           <div style={{ fontSize: 13, color: '#64748B', lineHeight: 1.5, marginBottom: 32 }}>
