@@ -5,7 +5,7 @@ import { setLoggedIn, verifyCredentials } from '../auth';
 const FONT = "'DM Sans', system-ui, sans-serif";
 
 const RingLogo: React.FC = () => (
-  <svg width="28" height="28" viewBox="0 0 40 40">
+  <svg width="40" height="40" viewBox="0 0 40 40">
     <defs>
       <linearGradient id="loginRing" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stopColor="#C4B5FD" />
@@ -21,9 +21,9 @@ const RingLogo: React.FC = () => (
 const IconBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
     style={{
-      width: 30,
-      height: 30,
-      borderRadius: 8,
+      width: 38,
+      height: 38,
+      borderRadius: 10,
       background: '#1E293B',
       display: 'flex',
       alignItems: 'center',
@@ -36,8 +36,8 @@ const IconBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 const svgBase = {
-  width: 16,
-  height: 16,
+  width: 18,
+  height: 18,
   viewBox: '0 0 24 24',
   fill: 'none',
   stroke: '#5B4FCF',
@@ -47,11 +47,11 @@ const svgBase = {
 };
 
 const FeatureRow: React.FC<{ icon: React.ReactNode; title: string; desc: string }> = ({ icon, title, desc }) => (
-  <div style={{ display: 'flex', gap: 12, marginBottom: 18 }}>
+  <div style={{ display: 'flex', gap: 14, marginBottom: 22 }}>
     <IconBox>{icon}</IconBox>
     <div>
-      <div style={{ fontSize: 12.5, fontWeight: 600, color: '#E2E8F0' }}>{title}</div>
-      <div style={{ fontSize: 11.5, color: '#475569', marginTop: 2, lineHeight: 1.4 }}>{desc}</div>
+      <div style={{ fontSize: 15, fontWeight: 600, color: '#F1F5F9' }}>{title}</div>
+      <div style={{ fontSize: 13, color: '#64748B', marginTop: 3, lineHeight: 1.5 }}>{desc}</div>
     </div>
   </div>
 );
