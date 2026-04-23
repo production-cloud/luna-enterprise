@@ -96,10 +96,10 @@ const Login: React.FC = () => {
     >
       {/* LEFT */}
       <div
-        className="md:w-[46%]"
+        className="md:w-1/2"
         style={{
           background: '#0F172A',
-          padding: '40px 36px',
+          padding: '48px 56px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -108,7 +108,7 @@ const Login: React.FC = () => {
         <div>
           {/* Logo row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
-            <RingLogo />
+            <img src={lunaLogo} alt="Luna" width={36} height={36} style={{ borderRadius: 8 }} />
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
                 Luna x Hospital
