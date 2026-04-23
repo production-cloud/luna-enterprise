@@ -202,7 +202,7 @@ const Login: React.FC = () => {
         </div>
 
         {/* Footer strip */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, color: '#334155', marginTop: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, color: '#64748B', marginTop: 24 }}>
           <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981' }} />
           HIPAA-aligned · Patient data encrypted at rest · SOC 2 Type II
         </div>
@@ -210,10 +210,10 @@ const Login: React.FC = () => {
 
       {/* RIGHT */}
       <div
-        className="md:w-[54%]"
+        className="md:w-1/2"
         style={{
           background: '#FAFAF8',
-          padding: '40px 44px',
+          padding: '48px 56px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
