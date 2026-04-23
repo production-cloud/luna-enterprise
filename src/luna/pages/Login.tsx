@@ -124,7 +124,7 @@ const Login: React.FC = () => {
             <RingLogo />
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
-                Luna LifeOS
+                Luna x Hospital
               </div>
               <div
                 style={{
