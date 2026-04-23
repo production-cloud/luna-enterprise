@@ -125,7 +125,7 @@ const PRIYA: PatientData = {
   snapshotCallout: '🏆 HRV up 26% over 90 days',
   sleep14: [7.2, 6.5, 6.8, 5.9, 7.1, 6.3, 7.4, 6.1, 6.9, 7.0, 6.2, 7.3, 6.7, 6.5],
   sleepStats: { deep: '68 min', debt: '3.2h', quality: '73%', deepFlag: true, debtFlag: true },
-  sleepCallout: '☕ Caffeine after 3pm costs 41 min deep sleep',
+  sleepCallout: '☕ Caffeine after 3pm may be linked to ~41 min less deep sleep',
   monitoring: { days: 127, lastSync: 'Apr 20, 2026' },
   cycles: [
     { id:'C1', start:'Dec 15 2025', end:'Jan 11 2026', period:5, len:28, ov:'Dec 28', ovDay:14, notes:'—', flag:false,
@@ -245,7 +245,7 @@ const ANANYA: PatientData = {
   snapshotCallout: '⚠ HRV trending down — review stress + sleep',
   sleep14: [5.8, 6.1, 5.5, 6.4, 5.9, 5.2, 6.0, 5.8, 6.2, 5.4, 5.9, 6.1, 5.7, 6.0],
   sleepStats: { deep: '52 min', debt: '5.8h', quality: '62%', deepFlag: true, debtFlag: true },
-  sleepCallout: '⚠ Average 5.9h sleep — endocrine impact likely',
+  sleepCallout: '⚠ Average 5.9h sleep — could affect endocrine balance',
   monitoring: { days: 89, lastSync: 'Apr 18, 2026' },
   cycles: [
     { id:'C1', start:'Dec 02 2025', end:'Jan 2 2026', period:7, len:32, ov:'Dec 19', ovDay:18, notes:'Long cycle', flag:true,
