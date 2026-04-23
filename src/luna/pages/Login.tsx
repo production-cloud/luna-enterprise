@@ -161,12 +161,12 @@ const Login: React.FC = () => {
           </div>
 
           {/* Cycle phase bar */}
-          <div style={{ marginBottom: 28 }}>
+          <div style={{ marginBottom: 36 }}>
             <div
               style={{
                 display: 'flex',
-                height: 5,
-                borderRadius: 3,
+                height: 6,
+                borderRadius: 4,
                 overflow: 'hidden',
               }}
             >
@@ -175,7 +175,7 @@ const Login: React.FC = () => {
               <div style={{ width: '3%', background: '#FCD34D' }} />
               <div style={{ flex: 1, background: '#5EEAD4' }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 9.5, fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 12, fontWeight: 600 }}>
               <span style={{ color: '#F4A7B9' }}>Menstrual</span>
               <span style={{ color: '#C4B5FD' }}>Follicular</span>
               <span style={{ color: '#FCD34D' }}>OV</span>
@@ -215,11 +215,6 @@ const Login: React.FC = () => {
           />
         </div>
 
-        {/* Footer strip */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, color: '#334155', marginTop: 24 }}>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981' }} />
-          HIPAA-aligned · Patient data encrypted at rest · SOC 2 Type II
-        </div>
       </div>
 
       {/* RIGHT */}
