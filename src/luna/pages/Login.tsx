@@ -5,7 +5,7 @@ import { setLoggedIn, verifyCredentials } from '../auth';
 const FONT = "'DM Sans', system-ui, sans-serif";
 
 const RingLogo: React.FC = () => (
-  <svg width="28" height="28" viewBox="0 0 40 40">
+  <svg width="40" height="40" viewBox="0 0 40 40">
     <defs>
       <linearGradient id="loginRing" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stopColor="#C4B5FD" />
@@ -21,9 +21,9 @@ const RingLogo: React.FC = () => (
 const IconBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
     style={{
-      width: 30,
-      height: 30,
-      borderRadius: 8,
+      width: 38,
+      height: 38,
+      borderRadius: 10,
       background: '#1E293B',
       display: 'flex',
       alignItems: 'center',
@@ -36,8 +36,8 @@ const IconBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 const svgBase = {
-  width: 16,
-  height: 16,
+  width: 18,
+  height: 18,
   viewBox: '0 0 24 24',
   fill: 'none',
   stroke: '#5B4FCF',
@@ -47,11 +47,11 @@ const svgBase = {
 };
 
 const FeatureRow: React.FC<{ icon: React.ReactNode; title: string; desc: string }> = ({ icon, title, desc }) => (
-  <div style={{ display: 'flex', gap: 12, marginBottom: 18 }}>
+  <div style={{ display: 'flex', gap: 14, marginBottom: 22 }}>
     <IconBox>{icon}</IconBox>
     <div>
-      <div style={{ fontSize: 12.5, fontWeight: 600, color: '#E2E8F0' }}>{title}</div>
-      <div style={{ fontSize: 11.5, color: '#475569', marginTop: 2, lineHeight: 1.4 }}>{desc}</div>
+      <div style={{ fontSize: 15, fontWeight: 600, color: '#F1F5F9' }}>{title}</div>
+      <div style={{ fontSize: 13, color: '#64748B', marginTop: 3, lineHeight: 1.5 }}>{desc}</div>
     </div>
   </div>
 );
@@ -109,10 +109,10 @@ const Login: React.FC = () => {
     >
       {/* LEFT */}
       <div
-        className="md:w-[46%]"
+        className="md:w-1/2"
         style={{
           background: '#0F172A',
-          padding: '40px 36px',
+          padding: '48px 56px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -120,20 +120,20 @@ const Login: React.FC = () => {
       >
         <div>
           {/* Logo row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 56 }}>
             <RingLogo />
             <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+              <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
                 Luna x Hospital
               </div>
               <div
                 style={{
-                  fontSize: 9,
+                  fontSize: 11,
                   fontWeight: 700,
-                  letterSpacing: '0.1em',
+                  letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: '#475569',
-                  marginTop: 2,
+                  marginTop: 4,
                 }}
               >
                 Clinical
@@ -144,29 +144,29 @@ const Login: React.FC = () => {
           {/* Tagline */}
           <div
             style={{
-              fontSize: 22,
+              fontSize: 34,
               fontWeight: 700,
               color: '#fff',
-              lineHeight: 1.3,
-              letterSpacing: '-0.4px',
-              marginBottom: 8,
+              lineHeight: 1.15,
+              letterSpacing: '-0.8px',
+              marginBottom: 16,
             }}
           >
             Fertility intelligence
             <br />
             for your clinic
           </div>
-          <div style={{ fontSize: 13, color: '#64748B', lineHeight: 1.5, marginBottom: 32 }}>
+          <div style={{ fontSize: 15, color: '#64748B', lineHeight: 1.55, marginBottom: 44 }}>
             AI-powered patient health reports from wearable and lifestyle data — built for IVF specialists.
           </div>
 
           {/* Cycle phase bar */}
-          <div style={{ marginBottom: 28 }}>
+          <div style={{ marginBottom: 36 }}>
             <div
               style={{
                 display: 'flex',
-                height: 5,
-                borderRadius: 3,
+                height: 6,
+                borderRadius: 4,
                 overflow: 'hidden',
               }}
             >
@@ -175,7 +175,7 @@ const Login: React.FC = () => {
               <div style={{ width: '3%', background: '#FCD34D' }} />
               <div style={{ flex: 1, background: '#5EEAD4' }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 9.5, fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 12, fontWeight: 600 }}>
               <span style={{ color: '#F4A7B9' }}>Menstrual</span>
               <span style={{ color: '#C4B5FD' }}>Follicular</span>
               <span style={{ color: '#FCD34D' }}>OV</span>
@@ -215,11 +215,6 @@ const Login: React.FC = () => {
           />
         </div>
 
-        {/* Footer strip */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, color: '#334155', marginTop: 24 }}>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981' }} />
-          HIPAA-aligned · Patient data encrypted at rest · SOC 2 Type II
-        </div>
       </div>
 
       {/* RIGHT */}
