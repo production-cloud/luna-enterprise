@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "./pages/NotFound.tsx";
 import { LunaLayout } from "./luna/Layout";
+import { RequireAuth } from "./luna/RequireAuth";
+import Login from "./luna/pages/Login";
 import Overview from "./luna/pages/Overview";
 import Cycle from "./luna/pages/Cycle";
 import Biomarkers from "./luna/pages/Biomarkers";
@@ -21,13 +23,16 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route element={<LunaLayout />}>
-            <Route path="/" element={<Overview />} />
-            <Route path="/cycle" element={<Cycle />} />
-            <Route path="/biomarkers" element={<Biomarkers />} />
-            <Route path="/lifestyle" element={<Lifestyle />} />
-            <Route path="/insights" element={<Insights />} />
-            <Route path="/partner" element={<Partner />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<RequireAuth />}>
+            <Route element={<LunaLayout />}>
+              <Route path="/" element={<Overview />} />
+              <Route path="/cycle" element={<Cycle />} />
+              <Route path="/biomarkers" element={<Biomarkers />} />
+              <Route path="/lifestyle" element={<Lifestyle />} />
+              <Route path="/insights" element={<Insights />} />
+              <Route path="/partner" element={<Partner />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

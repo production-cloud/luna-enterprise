@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Moon, Sun } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { LogOut, Moon, Sun } from 'lucide-react';
 import { C, PAGES } from './data';
 import { LunaLogo } from './atoms';
 import { IconOverview, IconCycle, IconBio, IconLifestyle, IconSparkle, IconPartner } from './icons';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from './hooks/useTheme';
+import { logout } from './auth';
 
 const ICONS: Record<string, React.FC> = {
   overview: IconOverview,
@@ -20,6 +21,7 @@ type Props = { expanded: boolean; onHover: (v: boolean) => void };
 
 export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
   const loc = useLocation();
+  const nav = useNavigate();
   const { theme, toggle } = useTheme();
   const dark = theme === 'dark';
   return (
@@ -105,6 +107,22 @@ export const Sidebar: React.FC<Props> = ({ expanded, onHover }) => {
             />
           )}
         </div>
+        <button
+          type="button"
+          onClick={() => { logout(); nav('/login', { replace: true }); }}
+          className="mt-2 flex items-center gap-3 h-9 w-full rounded-lg px-0 text-slate-400 hover:text-white transition-colors"
+          aria-label="Sign out"
+        >
+          <span className="shrink-0 flex items-center justify-center w-[18px]">
+            <LogOut size={16} />
+          </span>
+          <span
+            className="text-[12.5px] font-medium whitespace-nowrap overflow-hidden text-left"
+            style={{ opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}
+          >
+            Sign out
+          </span>
+        </button>
       </div>
     </aside>
   );
