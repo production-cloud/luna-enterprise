@@ -37,8 +37,8 @@ const FeatureRow: React.FC<{ icon: React.ReactNode; title: string; desc: string 
   <div style={{ display: 'flex', gap: 12, marginBottom: 18 }}>
     <IconBox>{icon}</IconBox>
     <div>
-      <div style={{ fontSize: 12.5, fontWeight: 600, color: '#E2E8F0' }}>{title}</div>
-      <div style={{ fontSize: 11.5, color: '#475569', marginTop: 2, lineHeight: 1.4 }}>{desc}</div>
+      <div style={{ fontSize: 12.5, fontWeight: 600, color: '#F1F5F9' }}>{title}</div>
+      <div style={{ fontSize: 11.5, color: '#94A3B8', marginTop: 2, lineHeight: 1.4 }}>{desc}</div>
     </div>
   </div>
 );
