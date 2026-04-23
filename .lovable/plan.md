@@ -1,79 +1,72 @@
 
-# Fix dark-mode readability in Overview alerts and AI Insights
 
-## 1. Replace brittle global selector approach
-The current dark-mode fix in `src/index.css` relies on `[style*="..."]` attribute selectors to detect pastel backgrounds. That is too fragile for mixed inline styles, nested text utilities, and future copy changes.
+# Add a gated login page (no real auth, hashed credentials)
 
-Replace it with explicit semantic classes for light pastel surfaces:
-- `.luna-soft-panel`
-- `.luna-soft-panel-danger`
-- `.luna-soft-panel-warn`
-- `.luna-soft-panel-info`
-- `.luna-soft-panel-success`
-- `.luna-soft-panel-title`
-- `.luna-soft-panel-meta`
+## Goal
+Block access to the dashboard until the user enters:
+- Email: `test@lunazone.com`
+- Password: `lunahealth321`
 
-These classes will define both background and text color together in light mode and dark mode, so readability is guaranteed instead of inferred.
+The plain credentials must NOT appear in the shipped JS bundle (no inspect-element leak).
 
-## 2. Apply the new classes to the affected UI
-Update the components where the unreadable text appears:
+## Approach: hash check, not plaintext compare
 
-### `src/luna/pages/Overview.tsx`
-- Active Alerts cards
-- Biomarker snapshot callout
-- Sleep callout
+The credentials will never exist as strings in the source code. Instead, the source contains only the **SHA-256 hashes** of the expected email and password. On submit, we hash what the user typed using the browser's built-in `crypto.subtle.digest('SHA-256', …)` and compare to the stored hashes.
 
-### `src/luna/pages/Insights.tsx`
-- Top info strip
-- “Action required” alert rows
-- Pattern insight cards
-- Strengths / Concerns boxes
+This means:
+- Viewing source / inspect element only reveals two opaque 64-char hex strings.
+- Reverse-engineering the password from a SHA-256 hash is not feasible for a strong string, and `lunahealth321` is reasonable enough for this demo gate. (Note: this is obfuscation, not real security — for true security we'd need a backend. The user explicitly said "doesn't need any auth", so this is the right level.)
 
-Use the semantic classes above instead of depending on `text-slate-*` inside pastel-background containers.
+## New files
 
-## 3. Keep severity accents, but separate them from body text
-For alert chips, left borders, dots, and confidence bars:
-- Keep the existing clinical accent colors (`C.flag`, `C.low`, `C.normal`, `C.indigo`)
-- Do not use those accent colors as the main body text color
-- Body copy, headings, and metadata should use dedicated readable text tokens from the new classes
+### `src/luna/auth.ts`
+- Exports `EXPECTED_EMAIL_HASH` and `EXPECTED_PASSWORD_HASH` constants (precomputed SHA-256 hex of `test@lunazone.com` and `lunahealth321`, lowercased/trimmed).
+- Exports `sha256Hex(input: string): Promise<string>` using `window.crypto.subtle`.
+- Exports `verifyCredentials(email, password): Promise<boolean>`.
+- Exports `isLoggedIn()` / `setLoggedIn()` / `logout()` helpers backed by `sessionStorage` (key `luna.session`, value is itself a hash so it can't be hand-forged easily).
 
-This preserves the current visual language while fixing contrast.
+### `src/luna/pages/Login.tsx`
+- Centered card on the existing `C.bg` background, matching Luna's visual language (same fonts, soft border, rounded, subtle shadow).
+- "Luna x Hospital" wordmark at top.
+- Email + password inputs (shadcn `Input`, `Label`), "Sign in" button (shadcn `Button`).
+- Inline error: "Invalid email or password" on bad submit (no hint about which field).
+- On success: `setLoggedIn()` then `navigate('/', { replace: true })`.
+- Respects dark mode (uses existing tokens, no hardcoded text colors that break in dark).
+- No "demo credentials" text shown anywhere.
 
-## 4. Make dark mode intentional, not inherited
-In `src/index.css`:
-- Keep the existing global `.dark .text-slate-*` overrides for standard dark UI
-- Remove the pastel-surface readability logic based on `[style*="..."]`
-- Add explicit dark-mode styles for the new semantic classes, for example:
-  - pastel panel backgrounds can stay softly tinted
-  - panel body text becomes dark slate when background is light
-  - or, if needed per surface, use darker tinted backgrounds with light text for better contrast consistency
+### `src/luna/RequireAuth.tsx`
+- Wrapper component: if `isLoggedIn()` → render `<Outlet />`; else `<Navigate to="/login" replace />`.
 
-Preferred approach: keep the pastel surfaces and force readable dark-slate text inside them.
+## Modified files
 
-## 5. Normalize repeated pastel UI patterns
-Also apply the same class system to the other matching surfaces so the problem does not reappear elsewhere:
-- `src/luna/pages/Partner.tsx` info strip and status chip
-- `src/luna/pages/Biomarkers.tsx` blood warning
-- `src/luna/pages/Lifestyle.tsx` adherence badge
-- `src/luna/atoms.tsx` `StatusPill` and `SevPill`
+### `src/App.tsx`
+- Add `/login` route (public).
+- Wrap the existing `LunaLayout` route in `<RequireAuth>` so `/`, `/cycle`, `/biomarkers`, `/lifestyle`, `/insights`, `/partner` all require login.
+- `NotFound` route stays public.
 
-This keeps all alert/status surfaces consistent across the dashboard.
+### `src/luna/Sidebar.tsx`
+- Add a small "Sign out" action at the bottom (next to the existing dark-mode toggle from earlier work). Clicking it calls `logout()` and navigates to `/login`.
+- Keep existing layout/spacing; just one extra icon button.
 
-## 6. No copy or layout changes
-Do not change:
-- wording
-- spacing
-- card layout
-- alert counts
-- confidence bar behavior
+## Session behavior
+- Login persists for the browser tab session (`sessionStorage`), so refresh keeps the user in but closing the tab signs them out. This is appropriate for a demo gate and avoids stale logins on shared machines.
+- No "remember me" checkbox (keeps surface minimal and avoids long-lived plaintext-ish flags in `localStorage`).
 
-Only fix color handling and theme readability.
+## What an attacker sees in DevTools
+- Two SHA-256 hex strings in the bundle.
+- A `sessionStorage` entry like `luna.session = <hash>` after login.
+- No plaintext email, no plaintext password, no `if (email === "test@…")` check.
+
+## Out of scope
+- No Supabase / Lovable Cloud auth (user said not needed).
+- No password reset, no signup.
+- No rate limiting (purely client-side gate).
+- No copy or layout changes to existing dashboard pages.
 
 ## Files touched
-- `src/index.css` — add semantic pastel-surface classes and dark-mode variants; remove brittle attribute-selector patch
-- `src/luna/pages/Overview.tsx` — apply semantic classes to alerts/callouts
-- `src/luna/pages/Insights.tsx` — apply semantic classes to info strip, alerts, insight cards, strengths/concerns
-- `src/luna/pages/Partner.tsx` — align info/status surfaces
-- `src/luna/pages/Biomarkers.tsx` — align warning surface
-- `src/luna/pages/Lifestyle.tsx` — align adherence badge
-- `src/luna/atoms.tsx` — update shared status/severity pill styling to use the same semantic class system
+- `src/luna/auth.ts` — new (hashed credentials + helpers)
+- `src/luna/pages/Login.tsx` — new (login UI)
+- `src/luna/RequireAuth.tsx` — new (route guard)
+- `src/App.tsx` — add `/login` route, wrap dashboard routes in guard
+- `src/luna/Sidebar.tsx` — add "Sign out" button
+
