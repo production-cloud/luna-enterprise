@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setLoggedIn, verifyCredentials } from '../auth';
-import lunaLogo from '@/assets/luna-logo.png';
 
 const FONT = "'DM Sans', system-ui, sans-serif";
+
+const RingLogo: React.FC = () => (
+  <svg width="28" height="28" viewBox="0 0 40 40">
+    <defs>
+      <linearGradient id="loginRing" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#C4B5FD" />
+        <stop offset="40%" stopColor="#E9D5FF" />
+        <stop offset="70%" stopColor="#FBCFE8" />
+        <stop offset="100%" stopColor="#FDE68A" />
+      </linearGradient>
+    </defs>
+    <circle cx="20" cy="20" r="13" fill="none" stroke="url(#loginRing)" strokeWidth="5" strokeLinecap="round" />
+  </svg>
+);
 
 const IconBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
@@ -37,8 +50,8 @@ const FeatureRow: React.FC<{ icon: React.ReactNode; title: string; desc: string 
   <div style={{ display: 'flex', gap: 12, marginBottom: 18 }}>
     <IconBox>{icon}</IconBox>
     <div>
-      <div style={{ fontSize: 12.5, fontWeight: 600, color: '#F1F5F9' }}>{title}</div>
-      <div style={{ fontSize: 11.5, color: '#94A3B8', marginTop: 2, lineHeight: 1.4 }}>{desc}</div>
+      <div style={{ fontSize: 12.5, fontWeight: 600, color: '#E2E8F0' }}>{title}</div>
+      <div style={{ fontSize: 11.5, color: '#475569', marginTop: 2, lineHeight: 1.4 }}>{desc}</div>
     </div>
   </div>
 );
@@ -96,10 +109,10 @@ const Login: React.FC = () => {
     >
       {/* LEFT */}
       <div
-        className="md:w-1/2"
+        className="md:w-[46%]"
         style={{
           background: '#0F172A',
-          padding: '48px 56px',
+          padding: '40px 36px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -108,7 +121,7 @@ const Login: React.FC = () => {
         <div>
           {/* Logo row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
-            <img src={lunaLogo} alt="Luna" width={36} height={36} style={{ borderRadius: 8 }} />
+            <RingLogo />
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
                 Luna x Hospital
@@ -140,6 +153,7 @@ const Login: React.FC = () => {
             }}
           >
             Fertility intelligence
+            <br />
             for your clinic
           </div>
           <div style={{ fontSize: 13, color: '#64748B', lineHeight: 1.5, marginBottom: 32 }}>
@@ -202,7 +216,7 @@ const Login: React.FC = () => {
         </div>
 
         {/* Footer strip */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, color: '#64748B', marginTop: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, color: '#334155', marginTop: 24 }}>
           <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981' }} />
           HIPAA-aligned · Patient data encrypted at rest · SOC 2 Type II
         </div>
@@ -210,10 +224,10 @@ const Login: React.FC = () => {
 
       {/* RIGHT */}
       <div
-        className="md:w-1/2"
+        className="md:w-[54%]"
         style={{
           background: '#FAFAF8',
-          padding: '48px 56px',
+          padding: '40px 44px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
