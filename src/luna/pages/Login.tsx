@@ -109,10 +109,10 @@ const Login: React.FC = () => {
     >
       {/* LEFT */}
       <div
-        className="md:w-[46%]"
+        className="md:w-1/2"
         style={{
           background: '#0F172A',
-          padding: '40px 36px',
+          padding: '48px 56px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -120,20 +120,20 @@ const Login: React.FC = () => {
       >
         <div>
           {/* Logo row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 56 }}>
             <RingLogo />
             <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+              <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
                 Luna x Hospital
               </div>
               <div
                 style={{
-                  fontSize: 9,
+                  fontSize: 11,
                   fontWeight: 700,
-                  letterSpacing: '0.1em',
+                  letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: '#475569',
-                  marginTop: 2,
+                  marginTop: 4,
                 }}
               >
                 Clinical
@@ -144,19 +144,19 @@ const Login: React.FC = () => {
           {/* Tagline */}
           <div
             style={{
-              fontSize: 22,
+              fontSize: 34,
               fontWeight: 700,
               color: '#fff',
-              lineHeight: 1.3,
-              letterSpacing: '-0.4px',
-              marginBottom: 8,
+              lineHeight: 1.15,
+              letterSpacing: '-0.8px',
+              marginBottom: 16,
             }}
           >
             Fertility intelligence
             <br />
             for your clinic
           </div>
-          <div style={{ fontSize: 13, color: '#64748B', lineHeight: 1.5, marginBottom: 32 }}>
+          <div style={{ fontSize: 15, color: '#64748B', lineHeight: 1.55, marginBottom: 44 }}>
             AI-powered patient health reports from wearable and lifestyle data — built for IVF specialists.
           </div>
 
